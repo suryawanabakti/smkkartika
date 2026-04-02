@@ -20,6 +20,9 @@ class AuthController extends Controller
             if (Auth::user()->isStudent()) {
                 return redirect()->route('student.dashboard');
             }
+            if (Auth::user()->isStaff()) {
+                return redirect()->route('staff.dashboard');
+            }
         }
         return view('auth.login');
     }
@@ -44,6 +47,10 @@ class AuthController extends Controller
 
             if (Auth::user()->isStudent()) {
                 return redirect()->intended(route('student.dashboard'));
+            }
+
+            if (Auth::user()->isStaff()) {
+                return redirect()->intended(route('staff.dashboard'));
             }
 
             // If not authorized for any panel, logout and show error

@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MajorController;
 use App\Http\Controllers\Admin\ClassRoomController;
@@ -9,6 +11,8 @@ use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\PersonnelAttendanceController;
 use App\Http\Controllers\Admin\StudentAttendanceController;
+use App\Http\Controllers\Admin\StaffController;
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\SchoolSettingController;
 
 Route::get('/', function () {
@@ -20,6 +24,12 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Password Reset Routes
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
+
 // Admin Routes (Protected)
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -28,8 +38,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('classrooms', ClassRoomController::class);
     Route::resource('teachers', TeacherController::class);
     Route::resource('students', StudentController::class);
+    Route::resource('staffs', StaffController::class);
+    Route::resource('admins', AdminController::class);
 
     Route::get('/attendance/personnel', [PersonnelAttendanceController::class, 'index'])->name('attendance.personnel');
+    Route::post('/attendance/personnel', [PersonnelAttendanceController::class, 'store'])->name('attendance.store');
+    Route::post('/attendance/personnel/checkout', [PersonnelAttendanceController::class, 'checkout'])->name('attendance.checkout');
     Route::get('/attendance/personnel/recap', [PersonnelAttendanceController::class, 'recap'])->name('attendance.personnel.recap');
     Route::get('/attendance/students', [StudentAttendanceController::class, 'index'])->name('attendance.students');
     Route::get('/attendance/students/recap', [StudentAttendanceController::class, 'recap'])->name('attendance.students.recap');
@@ -56,4 +70,13 @@ Route::middleware(['auth', 'teacher'])->prefix('teacher')->name('teacher.')->gro
 Route::middleware(['auth', 'student'])->prefix('student')->name('student.')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Student\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/attendance', [\App\Http\Controllers\Student\AttendanceController::class, 'index'])->name('attendance.index');
+});
+
+// Staff Routes
+Route::middleware(['auth', 'staff'])->prefix('staff')->name('staff.')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\Staff\DashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/attendance', [\App\Http\Controllers\Staff\AttendanceController::class, 'index'])->name('attendance.index');
+    Route::post('/attendance', [\App\Http\Controllers\Staff\AttendanceController::class, 'store'])->name('attendance.store');
+    Route::post('/attendance/checkout', [\App\Http\Controllers\Staff\AttendanceController::class, 'checkout'])->name('attendance.checkout');
 });

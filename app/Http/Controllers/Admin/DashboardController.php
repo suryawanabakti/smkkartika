@@ -10,6 +10,7 @@ use App\Models\Major;
 use App\Models\StudentAttendance;
 use App\Models\PersonnelAttendance;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -20,6 +21,7 @@ class DashboardController extends Controller
         $stats = [
             'total_students' => Student::count(),
             'total_teachers' => Teacher::count(),
+            'total_staffs' => \App\Models\Staff::count(),
             'total_classes' => ClassRoom::count(),
             'total_majors' => Major::count(),
             'student_attendance_today' => [
@@ -29,13 +31,23 @@ class DashboardController extends Controller
                 'permission' => StudentAttendance::where('date', $today)->where('status', 'permission')->count(),
             ],
             'personnel_attendance_today' => [
+                'total' => PersonnelAttendance::where('date', $today)->count(),
                 'present' => PersonnelAttendance::where('date', $today)->where('status', 'present')->count(),
-                'absent' => PersonnelAttendance::where('date', $today)->where('status', 'absent')->count(),
                 'sick' => PersonnelAttendance::where('date', $today)->where('status', 'sick')->count(),
                 'permission' => PersonnelAttendance::where('date', $today)->where('status', 'permission')->count(),
             ]
         ];
 
-        return view('admin.dashboard', compact('stats'));
+        $myAttendance = PersonnelAttendance::where('user_id', Auth::id())
+            ->where('date', $today)
+            ->first();
+
+        $schoolSettings = [
+            'latitude' => (float) \App\Models\SchoolSetting::get('school_latitude', -5.1436),
+            'longitude' => (float) \App\Models\SchoolSetting::get('school_longitude', 119.4667),
+            'radius' => (int) \App\Models\SchoolSetting::get('school_radius', 200),
+        ];
+
+        return view('admin.dashboard', compact('stats', 'myAttendance', 'schoolSettings'));
     }
 }

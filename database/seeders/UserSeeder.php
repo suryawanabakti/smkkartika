@@ -51,5 +51,18 @@ class UserSeeder extends Seeder
                 ]
             );
         }
+
+        $staffRole = Role::where('name', 'staff')->first();
+        // Create Staff Users
+        for ($i = 1; $i <= 5; $i++) {
+            User::updateOrCreate(
+                ['email' => "staff{$i}@smkkartika.sch.id"],
+                [
+                    'name' => "Staff Number {$i}",
+                    'password' => Hash::make('password'),
+                    'role_id' => $staffRole->id,
+                ]
+            );
+        }
     }
 }

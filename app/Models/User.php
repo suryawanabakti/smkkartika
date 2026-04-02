@@ -45,6 +45,11 @@ class User extends Authenticatable
         return $this->hasOne(Student::class);
     }
 
+    public function staff()
+    {
+        return $this->hasOne(Staff::class);
+    }
+
     public function personnelAttendances()
     {
         return $this->hasMany(PersonnelAttendance::class);
@@ -63,5 +68,10 @@ class User extends Authenticatable
     public function isStudent(): bool
     {
         return $this->role && $this->role->name === 'student';
+    }
+
+    public function isStaff(): bool
+    {
+        return $this->role && $this->role->name === 'staff';
     }
 }

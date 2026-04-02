@@ -54,4 +54,63 @@ class PersonnelAttendanceController extends Controller
 
         return view('admin.attendance.personnel_recap', compact('personnel', 'attendanceData', 'month', 'year', 'daysInMonth', 'startDate'));
     }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'latitude' => 'required|numeric|between:-90,90',
+            'longitude' => 'required|numeric|between:-180,180',
+        ]);
+
+        $user = auth()->user();
+        $today = Carbon::today()->toDateString();
+        
+        $existing = PersonnelAttendance::where('user_id', $user->id)
+            ->whereDate('date', $today)
+            ->first();
+            
+        if ($existing) {
+            return back()->with('error', 'Anda sudah melakukan absensi masuk hari ini.');
+        }
+
+        PersonnelAttendance::create([
+            'user_id' => $user->id,
+            'date' => $today,
+            'check_in_time' => now(),
+            'status' => 'present',
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+        ]);
+
+        return back()->with('success', 'Absensi masuk berhasil dicatat.');
+    }
+
+    public function checkout(Request $request)
+    {
+        $request->validate([
+            'latitude' => 'required|numeric|between:-90,90',
+            'longitude' => 'required|numeric|between:-180,180',
+        ]);
+
+        $user = auth()->user();
+        $today = Carbon::today()->toDateString();
+
+        $attendance = PersonnelAttendance::where('user_id', $user->id)
+            ->whereDate('date', $today)
+            ->first();
+
+        if (!$attendance) {
+            return back()->with('error', 'Anda belum melakukan absensi masuk hari ini.');
+        }
+
+        if ($attendance->check_out_time) {
+            return back()->with('error', 'Anda sudah melakukan absensi pulang hari ini.');
+        }
+
+        $attendance->update([
+            'check_out_time' => now(),
+        ]);
+
+        return back()->with('success', 'Absensi pulang berhasil dicatat.');
+    }
 }
