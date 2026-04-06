@@ -106,7 +106,7 @@
         <!-- Right Side: Login Form -->
         <div class="w-full lg:w-2/5 flex flex-col justify-center items-center p-8 sm:p-12 md:p-20 bg-white relative">
             <!-- Mobile Header (Only visible on small screens) -->
-            <div class="lg:hidden absolute top-12 left-0 w-full px-8 text-center">
+            <div class="lg:hidden w-full mb-10 text-center">
                 <div class="flex justify-center mb-4">
                     <img src="{{ asset('logo.png') }}" class="h-16 w-auto" alt="Logo">
                 </div>

@@ -58,6 +58,18 @@
                 </div>
 
                 <div class="space-y-2">
+                    <label for="gender" class="block text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">Jenis Kelamin Staff</label>
+                    <select name="gender" id="gender" class="block w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 transition-all duration-300 @error('gender') border-rose-500 bg-rose-50/30 @enderror" required>
+                        <option value="">Pilih Jenis Kelamin</option>
+                        <option value="L" {{ old('gender', $staff->gender) == 'L' ? 'selected' : '' }}>Laki-laki</option>
+                        <option value="P" {{ old('gender', $staff->gender) == 'P' ? 'selected' : '' }}>Perempuan</option>
+                    </select>
+                    @error('gender')
+                        <p class="mt-2 text-[10px] text-rose-500 font-black uppercase tracking-wider pl-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="space-y-2">
                     <label for="email" class="block text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">Email Sekolah / Personal</label>
                     <input 
                         type="email" 

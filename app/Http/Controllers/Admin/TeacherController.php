@@ -42,6 +42,7 @@ class TeacherController extends Controller
             'email' => 'required|email|unique:users,email',
             'nip' => 'required|string|max:20|unique:teachers,nip',
             'password' => 'required|string|min:8',
+            'gender' => 'required|in:L,P',
         ]);
 
         DB::transaction(function() use ($validated) {
@@ -57,6 +58,7 @@ class TeacherController extends Controller
             Teacher::create([
                 'user_id' => $user->id,
                 'nip' => $validated['nip'],
+                'gender' => $validated['gender'],
             ]);
         });
 
@@ -75,6 +77,7 @@ class TeacherController extends Controller
             'email' => 'required|email|unique:users,email,' . $teacher->user_id,
             'nip' => 'required|string|max:20|unique:teachers,nip,' . $teacher->id,
             'password' => 'nullable|string|min:8',
+            'gender' => 'required|in:L,P',
         ]);
 
         DB::transaction(function() use ($validated, $teacher, $request) {
@@ -91,6 +94,7 @@ class TeacherController extends Controller
 
             $teacher->update([
                 'nip' => $validated['nip'],
+                'gender' => $validated['gender'],
             ]);
         });
 
@@ -106,5 +110,23 @@ class TeacherController extends Controller
         });
 
         return redirect()->route('admin.teachers.index')->with('success', 'Guru berhasil dihapus.');
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $query = Teacher::with('user');
+
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where('nip', 'like', '%' . $search . '%')
+                  ->orWhereHas('user', function($q) use ($search) {
+                      $q->where('name', 'like', '%' . $search . '%')
+                        ->orWhere('email', 'like', '%' . $search . '%');
+                  });
+        }
+
+        $teachers = $query->latest()->get();
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.teachers.pdf', compact('teachers'))->setPaper('a4', 'portrait');
+        return $pdf->download('data-guru.pdf');
     }
 }

@@ -42,6 +42,7 @@ class StaffController extends Controller
             'email' => 'required|email|unique:users,email',
             'nip' => 'required|string|max:20|unique:staffs,nip',
             'password' => 'required|string|min:8',
+            'gender' => 'required|in:L,P',
         ]);
 
         DB::transaction(function() use ($validated) {
@@ -57,6 +58,7 @@ class StaffController extends Controller
             Staff::create([
                 'user_id' => $user->id,
                 'nip' => $validated['nip'],
+                'gender' => $validated['gender'],
             ]);
         });
 
@@ -75,6 +77,7 @@ class StaffController extends Controller
             'email' => 'required|email|unique:users,email,' . $staff->user_id,
             'nip' => 'required|string|max:20|unique:staffs,nip,' . $staff->id,
             'password' => 'nullable|string|min:8',
+            'gender' => 'required|in:L,P',
         ]);
 
         DB::transaction(function() use ($validated, $staff, $request) {
@@ -91,6 +94,7 @@ class StaffController extends Controller
 
             $staff->update([
                 'nip' => $validated['nip'],
+                'gender' => $validated['gender'],
             ]);
         });
 
@@ -106,5 +110,23 @@ class StaffController extends Controller
         });
 
         return redirect()->route('admin.staffs.index')->with('success', 'Staff berhasil dihapus.');
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $query = Staff::with('user');
+
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where('nip', 'like', '%' . $search . '%')
+                  ->orWhereHas('user', function($q) use ($search) {
+                      $q->where('name', 'like', '%' . $search . '%')
+                        ->orWhere('email', 'like', '%' . $search . '%');
+                  });
+        }
+
+        $staffs = $query->latest()->get();
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.staffs.pdf', compact('staffs'))->setPaper('a4', 'portrait');
+        return $pdf->download('data-staff.pdf');
     }
 }

@@ -67,4 +67,30 @@ class StudentAttendanceController extends Controller
 
         return view('admin.attendance.students_recap', compact('students', 'attendanceData', 'month', 'year', 'daysInMonth', 'startDate', 'classRooms'));
     }
+
+    public function exportPdf(Request $request)
+    {
+        $month = $request->get('month', date('n'));
+        $year = $request->get('year', date('Y'));
+        $classId = $request->get('class_id');
+        
+        $startDate = Carbon::createFromDate($year, $month, 1);
+        $daysInMonth = $startDate->daysInMonth;
+
+        $query = Student::with('user', 'classRoom.major');
+        if ($classId) {
+            $query->where('class_id', $classId);
+        }
+        $students = $query->get();
+
+        $attendanceData = StudentAttendance::whereYear('date', $year)
+            ->whereMonth('date', $month)
+            ->get()
+            ->groupBy(['student_id', function ($item) {
+                return Carbon::parse($item->date)->day;
+            }]);
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.attendance.students_recap_pdf', compact('students', 'attendanceData', 'month', 'year', 'daysInMonth', 'startDate'))->setPaper('a4', 'landscape');
+        return $pdf->download('rekap-kehadiran-siswa-'.$year.'-'.$month.'.pdf');
+    }
 }

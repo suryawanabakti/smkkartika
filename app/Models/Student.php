@@ -13,7 +13,8 @@ class Student extends Model
         'user_id',
         'class_id',
         'nis',
-        'address'
+        'address',
+        'gender'
     ];
 
     public function user()

@@ -64,6 +64,118 @@
         </div>
     </div>
 
+    <!-- Attendance Trend Chart -->
+    <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h3 class="text-lg font-black text-gray-800">Tren Kehadiran</h3>
+                <p class="text-xs text-gray-500 font-medium">Statistik kehadiran 7 hari terakhir</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 bg-emerald-500 rounded-full"></span>
+                    <span class="text-[10px] font-bold text-gray-600 uppercase tracking-widest">Siswa</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 bg-indigo-500 rounded-full"></span>
+                    <span class="text-[10px] font-bold text-gray-600 uppercase tracking-widest">Pegawai</span>
+                </div>
+            </div>
+        </div>
+        <div class="h-[300px] relative">
+            <canvas id="attendanceChart"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('attendanceChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: {!! json_encode($attendanceTrend['labels']) !!},
+                    datasets: [
+                        {
+                            label: 'Siswa',
+                            data: {!! json_encode($attendanceTrend['students']) !!},
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            borderWidth: 4,
+                            pointBackgroundColor: '#10b981',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'Pegawai',
+                            data: {!! json_encode($attendanceTrend['personnel']) !!},
+                            borderColor: '#6366f1',
+                            backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                            borderWidth: 4,
+                            pointBackgroundColor: '#6366f1',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            tension: 0.4,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: '#1e293b',
+                            titleFont: { size: 12, weight: 'bold', family: 'Inter' },
+                            bodyFont: { size: 12, family: 'Inter' },
+                            padding: 12,
+                            cornerRadius: 12,
+                            displayColors: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                display: true,
+                                color: 'rgba(0, 0, 0, 0.05)',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                precision: 0,
+                                font: { family: 'Inter', size: 11, weight: 'bold' },
+                                color: '#94a3b8'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: { family: 'Inter', size: 11, weight: 'bold' },
+                                color: '#94a3b8'
+                            }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    }
+                }
+            });
+        });
+    </script>
+
     <!-- Attendance Widget & Realtime Stats -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Self Attendance Widget (Admin) -->

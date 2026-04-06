@@ -44,14 +44,15 @@ class StudentController extends Controller
 
     public function store(Request $request)
     {
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'nis' => 'required|string|max:20|unique:students,nis',
-            'class_id' => 'required|exists:class_rooms,id',
+            'class_id' => 'required|exists:classes,id',
             'password' => 'required|string|min:8',
+            'gender' => 'required|in:L,P',
         ]);
-
         DB::transaction(function () use ($validated) {
             $studentRole = Role::where('name', 'student')->first();
 
@@ -66,6 +67,7 @@ class StudentController extends Controller
                 'user_id' => $user->id,
                 'nis' => $validated['nis'],
                 'class_id' => $validated['class_id'],
+                'gender' => $validated['gender'],
             ]);
         });
 
@@ -84,8 +86,9 @@ class StudentController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $student->user_id,
             'nis' => 'required|string|max:20|unique:students,nis,' . $student->id,
-            'class_id' => 'required|exists:class_rooms,id',
+            'class_id' => 'required|exists:classes,id',
             'password' => 'nullable|string|min:8',
+            'gender' => 'required|in:L,P',
         ]);
 
         DB::transaction(function () use ($validated, $student, $request) {
@@ -103,6 +106,7 @@ class StudentController extends Controller
             $student->update([
                 'nis' => $validated['nis'],
                 'class_id' => $validated['class_id'],
+                'gender' => $validated['gender'],
             ]);
         });
 
@@ -118,5 +122,27 @@ class StudentController extends Controller
         });
 
         return redirect()->route('admin.students.index')->with('success', 'Siswa berhasil dihapus.');
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $query = Student::with(['user', 'classRoom.major']);
+
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where('nis', 'like', '%' . $search . '%')
+                ->orWhereHas('user', function ($q) use ($search) {
+                    $q->where('name', 'like', '%' . $search . '%')
+                        ->orWhere('email', 'like', '%' . $search . '%');
+                });
+        }
+
+        if ($request->has('class_id') && $request->class_id != '') {
+            $query->where('class_id', $request->class_id);
+        }
+
+        $students = $query->latest()->get();
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.students.pdf', compact('students'))->setPaper('a4', 'portrait');
+        return $pdf->download('data-siswa.pdf');
     }
 }

@@ -36,16 +36,21 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::resource('majors', MajorController::class);
     Route::resource('classrooms', ClassRoomController::class);
+    Route::get('/teachers/export/pdf', [TeacherController::class, 'exportPdf'])->name('teachers.pdf');
     Route::resource('teachers', TeacherController::class);
+    Route::get('/students/export/pdf', [StudentController::class, 'exportPdf'])->name('students.pdf');
     Route::resource('students', StudentController::class);
+    Route::get('/staffs/export/pdf', [StaffController::class, 'exportPdf'])->name('staffs.pdf');
     Route::resource('staffs', StaffController::class);
     Route::resource('admins', AdminController::class);
 
     Route::get('/attendance/personnel', [PersonnelAttendanceController::class, 'index'])->name('attendance.personnel');
     Route::post('/attendance/personnel', [PersonnelAttendanceController::class, 'store'])->name('attendance.store');
     Route::post('/attendance/personnel/checkout', [PersonnelAttendanceController::class, 'checkout'])->name('attendance.checkout');
+    Route::get('/attendance/personnel/recap/pdf', [PersonnelAttendanceController::class, 'exportPdf'])->name('attendance.personnel.recap.pdf');
     Route::get('/attendance/personnel/recap', [PersonnelAttendanceController::class, 'recap'])->name('attendance.personnel.recap');
     Route::get('/attendance/students', [StudentAttendanceController::class, 'index'])->name('attendance.students');
+    Route::get('/attendance/students/recap/pdf', [StudentAttendanceController::class, 'exportPdf'])->name('attendance.students.recap.pdf');
     Route::get('/attendance/students/recap', [StudentAttendanceController::class, 'recap'])->name('attendance.students.recap');
 
     // School Settings

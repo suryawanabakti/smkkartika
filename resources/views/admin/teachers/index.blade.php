@@ -30,6 +30,10 @@
                         Bersihkan
                     </a>
                 @endif
+                <a href="{{ route('admin.teachers.pdf', request()->all()) }}" target="_blank" class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2 font-medium">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <span>Cetak PDF</span>
+                </a>
             </div>
         </form>
     </div>
@@ -43,6 +47,7 @@
                         <th class="px-4 sm:px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Nama</th>
                         <th class="px-4 sm:px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">NIP</th>
                         <th class="px-4 sm:px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider hidden md:table-cell">Email</th>
+                        <th class="px-4 sm:px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">L/P</th>
                         <th class="px-4 sm:px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider text-right">Aksi</th>
                     </tr>
                 </thead>
@@ -57,6 +62,7 @@
                                 <span class="font-mono text-[10px] sm:text-xs bg-gray-100 px-2 py-1 rounded">{{ $teacher->nip }}</span>
                             </td>
                             <td class="px-4 sm:px-6 py-4 text-gray-500 hidden md:table-cell">{{ $teacher->user->email }}</td>
+                            <td class="px-4 sm:px-6 py-4 text-gray-500">{{ $teacher->gender == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
                             <td class="px-4 sm:px-6 py-4 text-right space-x-2 sm:space-x-3 whitespace-nowrap">
                                 <a href="{{ route('admin.teachers.edit', $teacher) }}" class="text-indigo-600 hover:text-indigo-900 font-medium text-xs sm:text-sm">Edit</a>
                                  <form action="{{ route('admin.teachers.destroy', $teacher) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin? Ini juga akan menghapus akun pengguna terkait.')">
@@ -68,7 +74,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="px-6 py-12 text-center text-gray-500">
+                            <td colspan="5" class="px-6 py-12 text-center text-gray-500">
                                 Tidak ada data guru ditemukan.
                             </td>
                         </tr>

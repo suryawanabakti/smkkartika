@@ -113,4 +113,27 @@ class PersonnelAttendanceController extends Controller
 
         return back()->with('success', 'Absensi pulang berhasil dicatat.');
     }
+
+    public function exportPdf(Request $request)
+    {
+        $month = $request->get('month', date('n'));
+        $year = $request->get('year', date('Y'));
+        
+        $startDate = Carbon::createFromDate($year, $month, 1);
+        $daysInMonth = $startDate->daysInMonth;
+
+        $personnel = User::whereHas('role', function($q) {
+            $q->whereIn('name', ['admin', 'teacher', 'staff']);
+        })->get();
+
+        $attendanceData = PersonnelAttendance::whereYear('date', $year)
+            ->whereMonth('date', $month)
+            ->get()
+            ->groupBy(['user_id', function ($item) {
+                return Carbon::parse($item->date)->day;
+            }]);
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.attendance.personnel_recap_pdf', compact('personnel', 'attendanceData', 'month', 'year', 'daysInMonth', 'startDate'))->setPaper('a4', 'landscape');
+        return $pdf->download('rekap-kehadiran-pegawai-'.$year.'-'.$month.'.pdf');
+    }
 }

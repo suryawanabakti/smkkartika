@@ -50,6 +50,11 @@
                             Reset
                         </a>
                     @endif
+                    <a href="{{ route('admin.staffs.pdf', request()->all()) }}" target="_blank"
+                        class="px-8 py-4 bg-rose-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-rose-700 transition-all shadow-lg shadow-rose-600/20 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        CETAK PDF
+                    </a>
                 </div>
             </form>
         </div>
@@ -70,6 +75,9 @@
                             <th
                                 class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-50 hidden md:table-cell">
                                 Akses Login</th>
+                            <th
+                                class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-50">
+                                L/P</th>
                             <th
                                 class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-50 text-right">
                                 Manajemen</th>
@@ -111,6 +119,11 @@
                                         <span class="text-xs font-bold text-slate-500">{{ $staff->user->email }}</span>
                                     </div>
                                 </td>
+                                <td class="px-8 py-6">
+                                    <span class="inline-flex items-center px-3 py-1 bg-white border border-slate-200 rounded-lg text-xs font-black text-slate-600 shadow-sm">
+                                        {{ $staff->gender == 'L' ? 'Laki-laki' : 'Perempuan' }}
+                                    </span>
+                                </td>
                                 <td class="px-8 py-6 text-right space-x-2">
                                     <a href="{{ route('admin.staffs.edit', $staff) }}"
                                         class="inline-flex items-center px-4 py-2 bg-white border border-slate-200 rounded-xl text-[10px] font-black text-emerald-600 uppercase tracking-widest hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition-all duration-300 shadow-sm">
@@ -130,7 +143,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="px-8 py-20 text-center">
+                                <td colspan="5" class="px-8 py-20 text-center">
                                     <div class="flex flex-col items-center justify-center space-y-4">
                                         <div class="w-20 h-20 bg-slate-50 rounded-[2rem] flex items-center justify-center">
                                             <svg class="w-10 h-10 text-slate-200" fill="none" stroke="currentColor"

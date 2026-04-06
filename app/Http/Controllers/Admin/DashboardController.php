@@ -17,6 +17,23 @@ class DashboardController extends Controller
     public function index()
     {
         $today = Carbon::today()->toDateString();
+        $last7Days = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $last7Days[] = Carbon::today()->subDays($i)->toDateString();
+        }
+
+        $attendanceTrend = [
+            'labels' => array_map(function($date) {
+                return Carbon::parse($date)->format('d M');
+            }, $last7Days),
+            'students' => [],
+            'personnel' => []
+        ];
+
+        foreach ($last7Days as $date) {
+            $attendanceTrend['students'][] = StudentAttendance::where('date', $date)->where('status', 'present')->count();
+            $attendanceTrend['personnel'][] = PersonnelAttendance::where('date', $date)->where('status', 'present')->count();
+        }
 
         $stats = [
             'total_students' => Student::count(),
@@ -48,6 +65,6 @@ class DashboardController extends Controller
             'radius' => (int) \App\Models\SchoolSetting::get('school_radius', 200),
         ];
 
-        return view('admin.dashboard', compact('stats', 'myAttendance', 'schoolSettings'));
+        return view('admin.dashboard', compact('stats', 'myAttendance', 'schoolSettings', 'attendanceTrend'));
     }
 }
