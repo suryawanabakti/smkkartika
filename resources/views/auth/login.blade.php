@@ -197,7 +197,7 @@
                             <span
                                 class="absolute inset-0 w-full h-full bg-gradient-to-r from-emerald-400/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></span>
                             <span class="relative flex items-center gap-3 uppercase tracking-[0.2em] font-black">
-                                Masuk Sistem
+                                Login
                                 <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
