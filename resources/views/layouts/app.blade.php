@@ -28,7 +28,13 @@
     </style>
 </head>
 
-<body class="h-full antialiased text-slate-900" x-data="{ sidebarOpen: false }">
+<body class="h-full antialiased text-slate-900" x-data="{ 
+    sidebarOpen: false,
+    now: new Date(),
+    init() {
+        setInterval(() => { this.now = new Date() }, 1000);
+    }
+}">
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
         <aside
@@ -78,24 +84,6 @@
                             Dashboard Admin
                         </a>
 
-                        <div class="px-4 py-4 text-[10px] font-extrabold tracking-widest text-slate-500 uppercase">
-                            Akademik</div>
-                        <a href="{{ route('admin.majors.index') }}"
-                            class="flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 {{ request()->routeIs('admin.majors.*') ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20' : 'text-slate-500 hover:bg-slate-50 hover:text-emerald-600' }}">
-                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                            </svg>
-                            Data Jurusan
-                        </a>
-                        <a href="{{ route('admin.classrooms.index') }}"
-                            class="flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 {{ request()->routeIs('admin.classrooms.*') ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20' : 'text-slate-500 hover:bg-slate-50 hover:text-emerald-600' }}">
-                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
-                            </svg>
-                            Data Kelas
-                        </a>
 
                         <div class="px-4 py-4 text-[10px] font-extrabold tracking-widest text-slate-500 uppercase">
                             Pengguna</div>
@@ -107,14 +95,7 @@
                             </svg>
                             Data Guru
                         </a>
-                        <a href="{{ route('admin.students.index') }}"
-                            class="flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 {{ request()->routeIs('admin.students.*') ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20' : 'text-slate-500 hover:bg-slate-50 hover:text-emerald-600' }}">
-                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 01-9-3.833M18.732 7.961a5 5 0 11-9.047-4.461 5 5 0 019.047 4.461z" />
-                            </svg>
-                            Data Siswa
-                        </a>
+
                         <a href="{{ route('admin.staffs.index') }}"
                             class="flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 {{ request()->routeIs('admin.staffs.*') ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20' : 'text-slate-500 hover:bg-slate-50 hover:text-emerald-600' }}">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -142,7 +123,7 @@
                             </svg>
                             Harian Pegawai
                         </a>
-{{-- <a href="{{ route('admin.attendance.students') }}"
+                        {{-- <a href="{{ route('admin.attendance.students') }}"
                             class="flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 {{ request()->routeIs('admin.attendance.students') ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20' : 'text-slate-500 hover:bg-slate-50 hover:text-emerald-600' }}">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -161,7 +142,7 @@
                             </svg>
                             Rekap Pegawai
                         </a>
-{{-- <a href="{{ route('admin.attendance.students.recap') }}"
+                        {{-- <a href="{{ route('admin.attendance.students.recap') }}"
                             class="flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 {{ request()->routeIs('admin.attendance.students.recap') ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20' : 'text-slate-500 hover:bg-slate-50 hover:text-emerald-600' }}">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -238,7 +219,7 @@
 
                         <div class="px-4 py-4 text-[10px] font-extrabold tracking-widest text-slate-500 uppercase">
                             Manajemen Kelas</div>
-{{-- <a href="{{ route('teacher.students.index') }}"
+                        {{-- <a href="{{ route('teacher.students.index') }}"
                             class="flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 {{ request()->routeIs('teacher.students.index') ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20' : 'text-slate-500 hover:bg-slate-50 hover:text-emerald-600' }}">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -246,7 +227,7 @@
                             </svg>
                             Absensi Siswa
                         </a> --}}
-{{-- <a href="{{ route('teacher.students.recap') }}"
+                        {{-- <a href="{{ route('teacher.students.recap') }}"
                             class="flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 {{ request()->routeIs('teacher.students.recap') ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20' : 'text-slate-500 hover:bg-slate-50 hover:text-emerald-600' }}">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -313,9 +294,14 @@
 
                 <div class="flex items-center space-x-4 sm:space-x-6 lg:ml-auto">
                     <div class="flex flex-col items-end">
-                        <span
-                            class="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ now()->format('l') }}</span>
-                        <span class="text-xs sm:text-sm font-bold text-slate-600">{{ now()->format('d M Y') }}</span>
+                        <span class="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest" 
+                              x-text="now.toLocaleDateString('en-US', { weekday: 'long' })"></span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs sm:text-sm font-bold text-slate-600" 
+                                  x-text="now.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })"></span>
+                            <span class="hidden sm:inline-block text-[10px] font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-100 shadow-sm" 
+                                  x-text="now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' })"></span>
+                        </div>
                     </div>
                     <div class="w-px h-8 bg-slate-200"></div>
                     <form action="{{ route('logout') }}" method="POST">

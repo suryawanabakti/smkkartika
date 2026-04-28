@@ -18,7 +18,13 @@
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
-<body class="h-full antialiased text-gray-900 overflow-hidden" x-data="{ sidebarOpen: false }">
+<body class="h-full antialiased text-gray-900 overflow-hidden" x-data="{ 
+    sidebarOpen: false,
+    now: new Date(),
+    init() {
+        setInterval(() => { this.now = new Date() }, 1000);
+    }
+}">
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
         <aside
@@ -154,7 +160,14 @@
                 </button>
 
                 <div class="flex items-center space-x-4">
-                    <span class="text-sm font-medium text-gray-700">{{ now()->format('l, d M Y') }}</span>
+                    <div class="flex items-center gap-3">
+                        <span class="text-xs font-bold text-gray-500 uppercase tracking-widest" 
+                              x-text="now.toLocaleDateString('en-US', { weekday: 'long' })"></span>
+                        <span class="text-sm font-bold text-gray-700" 
+                              x-text="now.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })"></span>
+                        <span class="text-xs font-black text-indigo-600 bg-indigo-50 px-2 py-1 rounded-lg border border-indigo-100 shadow-sm" 
+                              x-text="now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' })"></span>
+                    </div>
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
                         <button type="submit"

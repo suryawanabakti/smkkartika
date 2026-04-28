@@ -134,42 +134,45 @@
     </div>
     
     <!-- Legend Card -->
-    <div class="p-6 bg-white rounded-2xl border border-gray-100 shadow-sm">
-        <h3 class="text-xs font-bold text-gray-400 uppercase mb-4">Legenda & Kode Status</h3>
-        <div class="flex flex-wrap gap-x-8 gap-y-4">
-            <div class="flex items-center gap-3 text-xs">
-                <div class="w-8 h-8 rounded-xl bg-green-50 text-green-600 flex items-center justify-center font-black border border-green-100">H</div>
+    <div class="p-6 bg-white rounded-[2rem] border border-slate-100 shadow-sm">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-1.5 h-6 bg-indigo-500 rounded-full"></div>
+            <h3 class="text-sm font-bold text-slate-800 uppercase tracking-tight">Legenda & Kode Status</h3>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-4">
+            <div class="flex items-center gap-3 p-3 rounded-2xl bg-emerald-50/50 border border-emerald-100/50">
+                <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center font-black text-emerald-600 border border-emerald-100">H</div>
                 <div class="flex flex-col">
-                    <span class="font-bold text-gray-700">Hadir</span>
-                    <span class="text-gray-400 text-[10px]">Hadir</span>
+                    <span class="font-bold text-slate-700 text-xs">Hadir</span>
+                    <span class="text-slate-400 text-[10px]">Tepat Waktu</span>
                 </div>
             </div>
-            <div class="flex items-center gap-3 text-xs">
-                <div class="w-8 h-8 rounded-xl bg-yellow-50 text-yellow-600 flex items-center justify-center font-black border border-yellow-100">S</div>
+            <div class="flex items-center gap-3 p-3 rounded-2xl bg-amber-50/50 border border-amber-100/50">
+                <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center font-black text-amber-600 border border-amber-100">S</div>
                 <div class="flex flex-col">
-                    <span class="font-bold text-gray-700">Sakit</span>
-                    <span class="text-gray-400 text-[10px]">Sakit</span>
+                    <span class="font-bold text-slate-700 text-xs">Sakit</span>
+                    <span class="text-slate-400 text-[10px]">Izin Sakit</span>
                 </div>
             </div>
-            <div class="flex items-center gap-3 text-xs">
-                <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-black border border-blue-100">I</div>
+            <div class="flex items-center gap-3 p-3 rounded-2xl bg-blue-50/50 border border-blue-100/50">
+                <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center font-black text-blue-600 border border-blue-100">I</div>
                 <div class="flex flex-col">
-                    <span class="font-bold text-gray-700">Izin</span>
-                    <span class="text-gray-400 text-[10px]">Izin</span>
+                    <span class="font-bold text-slate-700 text-xs">Izin</span>
+                    <span class="text-slate-400 text-[10px]">Keperluan Lain</span>
                 </div>
             </div>
-            <div class="flex items-center gap-3 text-xs">
-                <div class="w-8 h-8 rounded-xl bg-red-100 text-red-600 flex items-center justify-center font-black border border-red-200">A</div>
+            <div class="flex items-center gap-3 p-3 rounded-2xl bg-rose-50/50 border border-rose-100/50">
+                <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center font-black text-rose-600 border border-rose-100">A</div>
                 <div class="flex flex-col">
-                    <span class="font-bold text-gray-700">Alfa</span>
-                    <span class="text-gray-400 text-[10px]">Alfa</span>
+                    <span class="font-bold text-slate-700 text-xs">Alfa</span>
+                    <span class="text-slate-400 text-[10px]">Tanpa Ket.</span>
                 </div>
             </div>
-            <div class="flex items-center gap-3 text-xs">
-                <div class="w-8 h-8 rounded-xl bg-red-50 text-red-500 flex items-center justify-center font-black border border-red-100">L</div>
+            <div class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50/50 border border-slate-100/50">
+                <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center font-black text-slate-400 border border-slate-100">L</div>
                 <div class="flex flex-col">
-                    <span class="font-bold text-gray-700">Libur</span>
-                    <span class="text-gray-400 text-[10px]">Minggu/Hari Libur</span>
+                    <span class="font-bold text-slate-700 text-xs">Libur</span>
+                    <span class="text-slate-400 text-[10px]">Minggu/Libur</span>
                 </div>
             </div>
         </div>

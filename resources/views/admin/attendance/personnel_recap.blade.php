@@ -156,42 +156,45 @@
     </div>
     
     <!-- Legend Card -->
-    <div class="p-6 bg-white rounded-2xl border border-gray-100 shadow-sm">
-        <h3 class="text-xs font-bold text-gray-400 uppercase mb-4">Legenda & Kode Status</h3>
-        <div class="flex flex-wrap gap-x-8 gap-y-4">
-            <div class="flex items-center gap-3 text-xs">
-                <div class="w-8 h-8 rounded-xl bg-green-50 text-green-600 flex items-center justify-center font-black border border-green-100">H</div>
+    <div class="p-6 bg-white rounded-[2rem] border border-slate-100 shadow-sm">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-1.5 h-6 bg-indigo-500 rounded-full"></div>
+            <h3 class="text-sm font-bold text-slate-800 uppercase tracking-tight">Legenda & Kode Status</h3>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-4">
+            <div class="flex items-center gap-3 p-3 rounded-2xl bg-emerald-50/50 border border-emerald-100/50">
+                <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center font-black text-emerald-600 border border-emerald-100">H</div>
                 <div class="flex flex-col">
-                    <span class="font-bold text-gray-700">Hadir</span>
-                    <span class="text-gray-400 text-[10px]">Hadir</span>
+                    <span class="font-bold text-slate-700 text-xs">Hadir</span>
+                    <span class="text-slate-400 text-[10px]">Tepat Waktu</span>
                 </div>
             </div>
-            <div class="flex items-center gap-3 text-xs">
-                <div class="w-8 h-8 rounded-xl bg-yellow-50 text-yellow-600 flex items-center justify-center font-black border border-yellow-100">S</div>
+            <div class="flex items-center gap-3 p-3 rounded-2xl bg-amber-50/50 border border-amber-100/50">
+                <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center font-black text-amber-600 border border-amber-100">S</div>
                 <div class="flex flex-col">
-                    <span class="font-bold text-gray-700">Sakit</span>
-                    <span class="text-gray-400 text-[10px]">Sakit</span>
+                    <span class="font-bold text-slate-700 text-xs">Sakit</span>
+                    <span class="text-slate-400 text-[10px]">Izin Sakit</span>
                 </div>
             </div>
-            <div class="flex items-center gap-3 text-xs">
-                <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-black border border-blue-100">I</div>
+            <div class="flex items-center gap-3 p-3 rounded-2xl bg-blue-50/50 border border-blue-100/50">
+                <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center font-black text-blue-600 border border-blue-100">I</div>
                 <div class="flex flex-col">
-                    <span class="font-bold text-gray-700">Izin</span>
-                    <span class="text-gray-400 text-[10px]">Izin</span>
+                    <span class="font-bold text-slate-700 text-xs">Izin</span>
+                    <span class="text-slate-400 text-[10px]">Keperluan Lain</span>
                 </div>
             </div>
-            <div class="flex items-center gap-3 text-xs">
-                <div class="w-8 h-8 rounded-xl bg-red-100 text-red-600 flex items-center justify-center font-black border border-red-200">A</div>
+            <div class="flex items-center gap-3 p-3 rounded-2xl bg-rose-50/50 border border-rose-100/50">
+                <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center font-black text-rose-600 border border-rose-100">A</div>
                 <div class="flex flex-col">
-                    <span class="font-bold text-gray-700">Alfa</span>
-                    <span class="text-gray-400 text-[10px]">Alfa</span>
+                    <span class="font-bold text-slate-700 text-xs">Alfa</span>
+                    <span class="text-slate-400 text-[10px]">Tanpa Ket.</span>
                 </div>
             </div>
-            <div class="flex items-center gap-3 text-xs">
-                <div class="w-8 h-8 rounded-xl bg-red-50 text-red-500 flex items-center justify-center font-black border border-red-100">L</div>
+            <div class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50/50 border border-slate-100/50">
+                <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center font-black text-slate-400 border border-slate-100">L</div>
                 <div class="flex flex-col">
-                    <span class="font-bold text-gray-700">Libur</span>
-                    <span class="text-gray-400 text-[10px]">Minggu/Hari Libur</span>
+                    <span class="font-bold text-slate-700 text-xs">Libur</span>
+                    <span class="text-slate-400 text-[10px]">Minggu/Libur</span>
                 </div>
             </div>
         </div>
@@ -212,7 +215,7 @@
                  x-transition:leave="ease-in duration-200"
                  x-transition:leave-start="opacity-100"
                  x-transition:leave-end="opacity-0"
-                 class="fixed inset-0 bg-slate-900/60 backdrop-blur-md transition-opacity" 
+                 class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" 
                  @click="showModal = false"
                  aria-hidden="true"></div>
 
@@ -227,65 +230,116 @@
                  x-transition:leave="ease-in duration-200"
                  x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
                  x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                 class="relative inline-block align-bottom bg-white rounded-[2.5rem] text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-white z-[110]">
+                 class="relative inline-block align-bottom bg-white rounded-[2rem] text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full border border-slate-100 z-[110]">
                 
                 <form action="{{ route('admin.attendance.personnel.recap.update') }}" method="POST">
                     @csrf
                     <input type="hidden" name="user_id" x-model="selectedUserId">
                     <input type="hidden" name="date" x-model="selectedDate">
 
-                    <div class="bg-white px-8 pt-10 pb-8">
-                        <div class="flex items-center justify-between mb-8">
-                            <div>
-                                <h3 class="text-2xl font-black text-slate-900 leading-none" id="modal-title">Edit Kehadiran</h3>
-                                <div class="flex items-center gap-2 mt-2">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
-                                    <p class="text-xs font-bold text-slate-500 uppercase tracking-widest" x-text="selectedUser"></p>
+                    <div class="p-8">
+                        <!-- Modal Header -->
+                        <div class="flex items-start justify-between mb-8">
+                            <div class="space-y-1">
+                                <h3 class="text-xl font-bold text-slate-800" id="modal-title">Edit Kehadiran</h3>
+                                <div class="flex items-center gap-2">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-50 text-indigo-600 border border-indigo-100 uppercase tracking-tighter" x-text="selectedDate"></span>
+                                    <span class="text-slate-300 text-xs">•</span>
+                                    <p class="text-xs font-medium text-slate-500 truncate max-w-[150px]" x-text="selectedUser"></p>
                                 </div>
                             </div>
-                            <div class="px-4 py-2 bg-slate-50 rounded-2xl text-[11px] font-black text-slate-400 border border-slate-100 uppercase tracking-widest" x-text="selectedDate"></div>
+                            <button type="button" @click="showModal = false" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-xl transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
                         </div>
 
-                        <div class="space-y-8">
+                        <!-- Status Selection -->
+                        <div class="space-y-6">
                             <div>
-                                <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-4 ml-1">Status Kehadiran</label>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <template x-for="(label, status) in {present: 'Hadir', sick: 'Sakit', permission: 'Izin', absent: 'Alfa'}">
-                                        <label class="relative cursor-pointer group">
-                                            <input type="radio" name="status" :value="status" x-model="selectedStatus" class="peer sr-only">
-                                            <div class="p-4 rounded-2xl border-2 border-slate-50 bg-slate-50/50 text-sm font-bold transition-all flex items-center gap-3
-                                                        peer-checked:border-indigo-500 peer-checked:bg-white peer-checked:text-indigo-700 peer-checked:shadow-xl peer-checked:shadow-indigo-100/50
-                                                        group-hover:bg-white group-hover:border-slate-200">
-                                                <div class="w-2.5 h-2.5 rounded-full ring-4 ring-white shadow-sm" 
-                                                     :class="{
-                                                        'bg-emerald-500': status == 'present',
-                                                        'bg-amber-500': status == 'sick',
-                                                        'bg-blue-500': status == 'permission',
-                                                        'bg-rose-500': status == 'absent'
-                                                     }"></div>
-                                                <span x-text="label" class="text-slate-700 peer-checked:text-indigo-900"></span>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Pilih Status Kehadiran</label>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <!-- Status: Present -->
+                                    <label class="relative cursor-pointer group">
+                                        <input type="radio" name="status" value="present" x-model="selectedStatus" class="peer sr-only">
+                                        <div class="p-3.5 rounded-2xl border-2 border-slate-50 bg-slate-50/50 transition-all flex flex-col gap-2 items-center text-center
+                                                    peer-checked:border-emerald-500 peer-checked:bg-emerald-50/30 peer-checked:ring-4 peer-checked:ring-emerald-500/10
+                                                    group-hover:bg-white group-hover:border-slate-200">
+                                            <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-emerald-500 peer-checked:scale-110 transition-transform">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                </svg>
                                             </div>
-                                        </label>
-                                    </template>
+                                            <span class="text-xs font-bold text-slate-600">Hadir</span>
+                                        </div>
+                                    </label>
+
+                                    <!-- Status: Sick -->
+                                    <label class="relative cursor-pointer group">
+                                        <input type="radio" name="status" value="sick" x-model="selectedStatus" class="peer sr-only">
+                                        <div class="p-3.5 rounded-2xl border-2 border-slate-50 bg-slate-50/50 transition-all flex flex-col gap-2 items-center text-center
+                                                    peer-checked:border-amber-500 peer-checked:bg-amber-50/30 peer-checked:ring-4 peer-checked:ring-amber-500/10
+                                                    group-hover:bg-white group-hover:border-slate-200">
+                                            <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-amber-500 peer-checked:scale-110 transition-transform">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                                                </svg>
+                                            </div>
+                                            <span class="text-xs font-bold text-slate-600">Sakit</span>
+                                        </div>
+                                    </label>
+
+                                    <!-- Status: Permission -->
+                                    <label class="relative cursor-pointer group">
+                                        <input type="radio" name="status" value="permission" x-model="selectedStatus" class="peer sr-only">
+                                        <div class="p-3.5 rounded-2xl border-2 border-slate-50 bg-slate-50/50 transition-all flex flex-col gap-2 items-center text-center
+                                                    peer-checked:border-blue-500 peer-checked:bg-blue-50/30 peer-checked:ring-4 peer-checked:ring-blue-500/10
+                                                    group-hover:bg-white group-hover:border-slate-200">
+                                            <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-blue-500 peer-checked:scale-110 transition-transform">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                </svg>
+                                            </div>
+                                            <span class="text-xs font-bold text-slate-600">Izin</span>
+                                        </div>
+                                    </label>
+
+                                    <!-- Status: Absent -->
+                                    <label class="relative cursor-pointer group">
+                                        <input type="radio" name="status" value="absent" x-model="selectedStatus" class="peer sr-only">
+                                        <div class="p-3.5 rounded-2xl border-2 border-slate-50 bg-slate-50/50 transition-all flex flex-col gap-2 items-center text-center
+                                                    peer-checked:border-rose-500 peer-checked:bg-rose-50/30 peer-checked:ring-4 peer-checked:ring-rose-500/10
+                                                    group-hover:bg-white group-hover:border-slate-200">
+                                            <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-rose-500 peer-checked:scale-110 transition-transform">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </div>
+                                            <span class="text-xs font-bold text-slate-600">Alfa</span>
+                                        </div>
+                                    </label>
                                 </div>
                             </div>
 
+                            <!-- Additional Description -->
                             <div>
-                                <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-4 ml-1">Keterangan Tambahan</label>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Keterangan Tambahan (Opsional)</label>
                                 <textarea name="description" x-model="selectedDescription" rows="3" 
-                                          class="w-full px-5 py-4 rounded-[1.5rem] border-2 border-slate-50 bg-slate-50 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all text-sm font-medium text-slate-700 placeholder:text-slate-300"
-                                          placeholder="Tulis alasan sakit, izin, atau lainnya di sini..."></textarea>
+                                          class="w-full px-4 py-3 rounded-2xl border-2 border-slate-100 bg-slate-50/50 focus:bg-white focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-400 outline-none transition-all text-sm font-medium text-slate-700 placeholder:text-slate-300"
+                                          placeholder="Contoh: Sakit flu, Izin keperluan keluarga..."></textarea>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="bg-slate-50/80 backdrop-blur-sm px-8 py-8 flex flex-col sm:flex-row-reverse gap-4 border-t border-slate-100">
-                        <button type="submit" class="w-full sm:w-auto px-10 py-4 bg-slate-900 text-white rounded-2xl font-bold shadow-2xl shadow-slate-900/20 hover:bg-black hover:scale-[1.02] active:scale-[0.98] transition-all text-sm">
-                            Simpan Perubahan
-                        </button>
-                        <button type="button" @click="showModal = false" class="w-full sm:w-auto px-10 py-4 bg-white text-slate-500 rounded-2xl font-bold border border-slate-200 hover:bg-slate-50 hover:text-slate-700 transition-all text-sm">
-                            Batalkan
-                        </button>
+                        <!-- Modal Footer -->
+                        <div class="mt-10 flex flex-col gap-3">
+                            <button type="submit" class="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 hover:translate-y-[-2px] active:translate-y-[0px] transition-all text-sm">
+                                Simpan Perubahan
+                            </button>
+                            <button type="button" @click="showModal = false" class="w-full py-4 bg-white text-slate-500 rounded-2xl font-bold border border-slate-100 hover:bg-slate-50 hover:text-slate-700 transition-all text-sm">
+                                Batalkan
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>

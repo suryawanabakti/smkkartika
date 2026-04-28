@@ -132,7 +132,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <p class="text-xs text-rose-500 font-black uppercase tracking-widest mb-1">Akses Ditolak
+                                <p class="text-xs text-rose-500 font-black uppercase tracking-widest mb-1">Anda belum terdaftar pada sistem
                                 </p>
                                 <p class="text-sm font-bold text-rose-700 leading-tight">{{ $errors->first() }}</p>
                             </div>
