@@ -22,6 +22,11 @@ class DashboardController extends Controller
             ->first();
 
         $class = $user->teacher->classRoom;
+        $classStats = [
+            'total_students' => 0,
+            'present_today' => 0,
+            'absent_today' => 0,
+        ];
         $chartData = [
             'labels' => [],
             'present' => [],
