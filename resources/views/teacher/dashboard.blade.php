@@ -277,69 +277,23 @@
                 </div>
             </div>
 
-            @if ($class)
-                <!-- Class Stats Card -->
-                <div
-                    class="lg:col-span-2 bg-slate-900 p-8 rounded-[2rem] text-white relative overflow-hidden group shadow-2xl shadow-slate-200">
-                    <div
-                        class="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full -mr-32 -mt-32 blur-3xl group-hover:bg-emerald-500/20 transition-all duration-500">
-                    </div>
-                    <div class="relative z-10 flex flex-col h-full justify-between">
+            <!-- Personal Attendance Chart Card -->
+            <div class="lg:col-span-2 bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm shadow-slate-100/50 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full -mr-16 -mt-16 blur-2xl group-hover:bg-indigo-500/10 transition-all duration-500"></div>
+                <div class="relative z-10 flex flex-col h-full">
+                    <div class="flex items-center justify-between mb-8">
                         <div>
-                            <div class="flex items-center gap-3 mb-6">
-                                <div
-                                    class="px-3 py-1 bg-white/10 backdrop-blur-md rounded-lg text-[10px] font-black uppercase tracking-widest border border-white/10">
-                                    Wali Kelas</div>
-                                <span class="text-indigo-400 font-black">•</span>
-                                <span class="text-white/80 font-bold text-sm">{{ $class->name }}</span>
-                            </div>
-                            <h3 class="text-3xl font-extrabold mb-8 tracking-tight">Ringkasan Kelas Hari Ini</h3>
+                            <h3 class="text-xl font-extrabold text-slate-900">Grafik Kehadiranku</h3>
+                            <p class="text-xs font-medium text-slate-500 mt-1">Status kehadiran 7 hari terakhir Anda.</p>
                         </div>
-
-                        <div class="grid grid-cols-3 gap-6">
-                            <div
-                                class="p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/5 group/stat hover:bg-white/10 transition-colors">
-                                <p class="text-white/40 text-[10px] font-black uppercase tracking-widest mb-2">Total Siswa
-                                </p>
-                                <p class="text-3xl font-black">{{ $classStats['total_students'] }}</p>
-                            </div>
-                            <div
-                                class="p-6 bg-emerald-500/20 backdrop-blur-md rounded-2xl border border-emerald-500/20 group/stat hover:bg-emerald-500/30 transition-colors">
-                                <p class="text-emerald-400 text-[10px] font-black uppercase tracking-widest mb-2">Hadir</p>
-                                <p class="text-3xl font-black text-emerald-400">{{ $classStats['present_today'] }}</p>
-                            </div>
-                            <div
-                                class="p-6 bg-rose-500/20 backdrop-blur-md rounded-2xl border border-rose-500/20 group/stat hover:bg-rose-500/30 transition-colors">
-                                <p class="text-rose-400 text-[10px] font-black uppercase tracking-widest mb-2">Tidak Hadir
-                                </p>
-                                <p class="text-3xl font-black text-rose-400">{{ $classStats['absent_today'] }}</p>
-                            </div>
-                        </div>
-
-                        <div class="mt-8 flex items-center justify-between">
-                            <p class="text-white/60 text-sm font-medium">Data diperbarui secara real-time.</p>
-                            <a href="{{ route('teacher.students.index') }}"
-                                class="px-6 py-3 bg-white text-slate-900 rounded-xl font-bold shadow-xl hover:bg-slate-50 hover:scale-[1.02] active:scale-[0.98] transition-all">
-                                Kelola Kehadiran
-                            </a>
+                        <div class="flex flex-col items-end gap-1">
+                            <span class="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-[10px] font-black uppercase tracking-widest border border-emerald-100 shadow-sm">Live Trend</span>
                         </div>
                     </div>
+
+                    <div id="personal-attendance-chart" class="min-h-[280px] w-full"></div>
                 </div>
-            @else
-                <div
-                    class="lg:col-span-2 bg-indigo-50 p-8 rounded-[2rem] border-2 border-dashed border-indigo-200 flex flex-col items-center justify-center text-center">
-                    <div
-                        class="w-16 h-16 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 mb-4">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-extrabold text-indigo-900">Belum Ada Tugas Wali Kelas</h3>
-                    <p class="text-indigo-600/70 text-sm font-medium mt-2 max-w-sm px-4">Anda saat ini belum ditugaskan
-                        sebagai wali kelas. Silakan hubungi bagian kurikulum atau admin.</p>
-                </div>
-            @endif
+            </div>
         </div>
 
 
@@ -350,15 +304,12 @@
         document.addEventListener('DOMContentLoaded', function() {
             const options = {
                 series: [{
-                    name: 'Hadir',
-                    data: {!! json_encode($chartData['present']) !!}
-                }, {
-                    name: 'Tidak Hadir',
-                    data: {!! json_encode($chartData['absent']) !!}
+                    name: 'Status Kehadiran',
+                    data: {!! json_encode($myChartData['values']) !!}
                 }],
                 chart: {
                     type: 'area',
-                    height: 350,
+                    height: 280,
                     toolbar: {
                         show: false
                     },
@@ -367,13 +318,13 @@
                     },
                     fontFamily: 'Inter, sans-serif'
                 },
-                colors: ['#10b981', '#f43f5e'],
+                colors: ['#6366f1'],
                 dataLabels: {
                     enabled: false
                 },
                 stroke: {
                     curve: 'smooth',
-                    width: 3
+                    width: 4
                 },
                 fill: {
                     type: 'gradient',
@@ -384,7 +335,7 @@
                         stops: [20, 100]
                     }
                 },
-                labels: {!! json_encode($chartData['labels']) !!},
+                labels: {!! json_encode($myChartData['labels']) !!},
                 xaxis: {
                     tooltip: {
                         enabled: false
@@ -394,46 +345,66 @@
                     },
                     axisTicks: {
                         show: false
-                    }
-                },
-                yaxis: {
+                    },
                     labels: {
                         style: {
                             colors: '#64748b',
-                            fontWeight: 600
+                            fontWeight: 600,
+                            fontSize: '11px'
+                        }
+                    }
+                },
+                yaxis: {
+                    min: 0,
+                    max: 1.2,
+                    tickAmount: 2,
+                    labels: {
+                        formatter: function(val) {
+                            if (val >= 1) return "Hadir";
+                            if (val >= 0.5) return "S/I";
+                            return "Alfa";
+                        },
+                        style: {
+                            colors: '#64748b',
+                            fontWeight: 700,
+                            fontSize: '10px'
                         }
                     }
                 },
                 grid: {
                     borderColor: '#f1f5f9',
-                    strokeDashArray: 4,
+                    strokeDashArray: 6,
                     padding: {
                         left: 20,
                         right: 20
                     }
                 },
-                legend: {
-                    position: 'top',
-                    horizontalAlign: 'right',
-                    fontWeight: 700,
-                    fontSize: '12px',
-                    markers: {
-                        radius: 12
-                    }
-                },
                 tooltip: {
                     theme: 'light',
-                    shared: true,
-                    intersect: false,
-                    y: {
-                        formatter: function(val) {
-                            return val + " Siswa"
-                        }
+                    custom: function({
+                        series,
+                        seriesIndex,
+                        dataPointIndex,
+                        w
+                    }) {
+                        const statuses = {!! json_encode($myChartData['statuses']) !!};
+                        const status = statuses[dataPointIndex];
+                        const date = w.globals.labels[dataPointIndex];
+                        return '<div class="px-4 py-2 bg-white shadow-xl rounded-xl border border-slate-100">' +
+                            '<div class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">' +
+                            date + '</div>' +
+                            '<div class="flex items-center gap-2">' +
+                            '<div class="w-2 h-2 rounded-full ' + (status === 'Hadir' ? 'bg-emerald-500' :
+                                (status === 'Sakit' || status === 'Izin' ? 'bg-amber-500' :
+                                    'bg-rose-500')) + '"></div>' +
+                            '<div class="text-sm font-black text-slate-700">' + status + '</div>' +
+                            '</div>' +
+                            '</div>';
                     }
                 }
             };
 
-            const chart = new ApexCharts(document.querySelector("#attendance-chart"), options);
+            const chart = new ApexCharts(document.querySelector("#personal-attendance-chart"), options);
             chart.render();
         });
     </script>

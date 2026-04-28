@@ -134,9 +134,9 @@
                                         }
                                     }
                                 @endphp
-                                <td @if(!$isSunday) @click="if(editMode) openEdit('{{ $person->id }}', '{{ $person->name }}', '{{ $date->toDateString() }}', '{{ $status }}', '{{ addslashes($description) }}')" @endif
+                                <td @if(!$isSunday) @click="if(editMode && '{{ $status }}' !== 'present') openEdit('{{ $person->id }}', '{{ $person->name }}', '{{ $date->toDateString() }}', '{{ $status }}', '{{ addslashes($description) }}')" @endif
                                     class="px-1 py-1 text-center border-r border-gray-50 min-w-[38px] {{ $cellClass }} transition-all duration-300 {{ !$isSunday ? 'cursor-default' : '' }}"
-                                    :class="editMode && !{{ $isSunday ? 'true' : 'false' }} ? 'hover:bg-indigo-50 hover:scale-110 cursor-pointer shadow-inner' : ''">
+                                    :class="editMode && !{{ $isSunday ? 'true' : 'false' }} && '{{ $status }}' !== 'present' ? 'hover:bg-indigo-50 hover:scale-110 cursor-pointer shadow-inner' : (editMode && '{{ $status }}' === 'present' ? 'opacity-50 cursor-not-allowed' : '')">
                                     <div class="relative group/cell">
                                         {{ $statusChar }}
                                         @if($description)

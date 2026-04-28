@@ -64,6 +64,15 @@ class PersonnelAttendanceController extends Controller
             'description' => 'nullable|string'
         ]);
 
+        // Check if existing record is 'present'
+        $existing = PersonnelAttendance::where('user_id', $request->user_id)
+            ->where('date', $request->date)
+            ->first();
+
+        if ($existing && $existing->status === 'present') {
+            return back()->with('error', 'Status Hadir tidak dapat diubah.');
+        }
+
         $attendance = PersonnelAttendance::updateOrCreate(
             ['user_id' => $request->user_id, 'date' => $request->date],
             ['status' => $request->status, 'description' => $request->description]
