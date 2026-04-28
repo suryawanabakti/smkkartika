@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\StudentAttendanceController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\SchoolSettingController;
+use App\Http\Controllers\Admin\BackupController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -57,6 +58,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // School Settings
     Route::get('/settings/school', [SchoolSettingController::class, 'edit'])->name('settings.school');
     Route::put('/settings/school', [SchoolSettingController::class, 'update'])->name('settings.school.update');
+
+    // Backup Settings
+    Route::get('/settings/backup', [BackupController::class, 'index'])->name('backup.index');
+    Route::post('/settings/backup/create', [BackupController::class, 'create'])->name('backup.create');
+    Route::get('/settings/backup/download/{filename}', [BackupController::class, 'download'])->name('backup.download');
+    Route::delete('/settings/backup/{filename}', [BackupController::class, 'destroy'])->name('backup.destroy');
 });
 
 // Teacher Routes
