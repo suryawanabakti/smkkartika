@@ -211,7 +211,7 @@
             </div>
         </div>
 
-        @if($class)
+{{-- @if($class)
             <!-- Class Stats Card -->
             <div class="lg:col-span-2 bg-slate-900 p-8 rounded-[2rem] text-white relative overflow-hidden group">
                 <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-500/20 rounded-full -mr-32 -mt-32 blur-3xl group-hover:bg-indigo-500/30 transition-all duration-500"></div>
@@ -256,22 +256,114 @@
                 <h3 class="text-xl font-extrabold text-indigo-900 truncate">Tidak Ada Kelas</h3>
                 <p class="text-indigo-600/70 text-sm font-medium mt-2 max-w-sm">Anda saat ini belum ditugaskan sebagai wali kelas. Hubungi administrasi untuk penugasan kelas.</p>
             </div>
-        @endif
+        @endif --}}
     </div>
 
-    <!-- Recent Activity Placeholder -->
+{{-- <!-- Attendance Insight Chart -->
     <div class="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden">
-        <div class="px-8 py-6 border-b border-slate-100 flex items-center justify-between">
-            <h3 class="text-lg font-extrabold text-slate-900">Wawasan Kehadiran</h3>
-            <span class="text-xs font-bold text-indigo-600">Bulan Ini</span>
-        </div>
-        <div class="p-12 flex flex-col items-center justify-center text-center">
-            <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-slate-300 mb-6">
-                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        <div class="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+            <div>
+                <h3 class="text-lg font-extrabold text-slate-900">Wawasan Kehadiran Siswa</h3>
+                <p class="text-xs font-medium text-slate-500">Tren kehadiran 7 hari terakhir for {{ $class->name ?? 'Kelas' }}</p>
             </div>
-            <h4 class="text-slate-900 font-bold mb-1">Segera Hadir</h4>
-            <p class="text-slate-400 text-sm max-w-xs">Analisis detail dan laporan bulanan untuk kelas Anda akan tersedia di sini.</p>
+            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-lg text-[10px] font-black uppercase tracking-widest border border-indigo-100">7 Hari Terakhir</span>
         </div>
-    </div>
+        <div class="p-4 sm:p-8">
+            <div id="attendance-chart" class="min-h-[350px] w-full"></div>
+        </div>
+    </div> --}}
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const options = {
+            series: [{
+                name: 'Hadir',
+                data: {!! json_encode($chartData['present']) !!}
+            }, {
+                name: 'Tidak Hadir',
+                data: {!! json_encode($chartData['absent']) !!}
+            }],
+            chart: {
+                type: 'area',
+                height: 350,
+                toolbar: {
+                    show: false
+                },
+                zoom: {
+                    enabled: false
+                },
+                fontFamily: 'Inter, sans-serif'
+            },
+            colors: ['#10b981', '#f43f5e'],
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 3
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.45,
+                    opacityTo: 0.05,
+                    stops: [20, 100]
+                }
+            },
+            labels: {!! json_encode($chartData['labels']) !!},
+            xaxis: {
+                tooltip: {
+                    enabled: false
+                },
+                axisBorder: {
+                    show: false
+                },
+                axisTicks: {
+                    show: false
+                }
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        colors: '#64748b',
+                        fontWeight: 600
+                    }
+                }
+            },
+            grid: {
+                borderColor: '#f1f5f9',
+                strokeDashArray: 4,
+                padding: {
+                    left: 20,
+                    right: 20
+                }
+            },
+            legend: {
+                position: 'top',
+                horizontalAlign: 'right',
+                fontWeight: 700,
+                fontSize: '12px',
+                markers: {
+                    radius: 12
+                }
+            },
+            tooltip: {
+                theme: 'light',
+                shared: true,
+                intersect: false,
+                y: {
+                    formatter: function (val) {
+                        return val + " Siswa"
+                    }
+                }
+            }
+        };
+
+        const chart = new ApexCharts(document.querySelector("#attendance-chart"), options);
+        chart.render();
+    });
+</script>
 @endsection

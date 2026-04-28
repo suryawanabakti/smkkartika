@@ -16,7 +16,8 @@ class PersonnelAttendance extends Model
         'check_out_time',
         'status',
         'latitude',
-        'longitude'
+        'longitude',
+        'description'
     ];
 
     protected $casts = [

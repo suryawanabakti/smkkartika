@@ -22,11 +22,16 @@ class DashboardController extends Controller
             ->first();
 
         $class = $user->teacher->classRoom;
-        $classStats = null;
+        $chartData = [
+            'labels' => [],
+            'present' => [],
+            'absent' => [],
+        ];
 
         if ($class) {
-
             $studentIds = $class->students->pluck('id');
+            
+            // Existing stats
             $classStats = [
                 'total_students' => $class->students->count(),
                 'present_today' => StudentAttendance::whereIn('student_id', $studentIds)
@@ -38,6 +43,24 @@ class DashboardController extends Controller
                     ->whereIn('status', ['absent', 'sick', 'permission'])
                     ->count(),
             ];
+
+            // Chart data for last 7 days
+            $attendanceData = StudentAttendance::whereIn('student_id', $studentIds)
+                ->where('date', '>=', Carbon::today()->subDays(6))
+                ->get()
+                ->groupBy(function($item) {
+                    return $item->date->toDateString();
+                });
+
+            for ($i = 6; $i >= 0; $i--) {
+                $date = Carbon::today()->subDays($i);
+                $dateString = $date->toDateString();
+                $chartData['labels'][] = $date->format('d M');
+                
+                $dayData = $attendanceData->get($dateString, collect());
+                $chartData['present'][] = $dayData->where('status', 'present')->count();
+                $chartData['absent'][] = $dayData->whereIn('status', ['absent', 'sick', 'permission'])->count();
+            }
         }
 
         $schoolSettings = [
@@ -47,6 +70,6 @@ class DashboardController extends Controller
             'radius' => (int) SchoolSetting::get('school_radius', 200),
         ];
 
-        return view('teacher.dashboard', compact('myAttendance', 'class', 'classStats', 'schoolSettings'));
+        return view('teacher.dashboard', compact('myAttendance', 'class', 'classStats', 'schoolSettings', 'chartData'));
     }
 }

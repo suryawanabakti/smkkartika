@@ -49,6 +49,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/attendance/personnel/checkout', [PersonnelAttendanceController::class, 'checkout'])->name('attendance.checkout');
     Route::get('/attendance/personnel/recap/pdf', [PersonnelAttendanceController::class, 'exportPdf'])->name('attendance.personnel.recap.pdf');
     Route::get('/attendance/personnel/recap', [PersonnelAttendanceController::class, 'recap'])->name('attendance.personnel.recap');
+    Route::post('/attendance/personnel/recap/update', [PersonnelAttendanceController::class, 'updateRecap'])->name('attendance.personnel.recap.update');
     Route::get('/attendance/students', [StudentAttendanceController::class, 'index'])->name('attendance.students');
     Route::get('/attendance/students/recap/pdf', [StudentAttendanceController::class, 'exportPdf'])->name('attendance.students.recap.pdf');
     Route::get('/attendance/students/recap', [StudentAttendanceController::class, 'recap'])->name('attendance.students.recap');

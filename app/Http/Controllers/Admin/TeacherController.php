@@ -43,6 +43,7 @@ class TeacherController extends Controller
             'nip' => 'required|string|max:20|unique:teachers,nip',
             'password' => 'required|string|min:8',
             'gender' => 'required|in:L,P',
+            'position' => 'nullable|string|max:255',
         ]);
 
         DB::transaction(function() use ($validated) {
@@ -59,6 +60,7 @@ class TeacherController extends Controller
                 'user_id' => $user->id,
                 'nip' => $validated['nip'],
                 'gender' => $validated['gender'],
+                'position' => $validated['position'] ?? null,
             ]);
         });
 
@@ -78,6 +80,7 @@ class TeacherController extends Controller
             'nip' => 'required|string|max:20|unique:teachers,nip,' . $teacher->id,
             'password' => 'nullable|string|min:8',
             'gender' => 'required|in:L,P',
+            'position' => 'nullable|string|max:255',
         ]);
 
         DB::transaction(function() use ($validated, $teacher, $request) {
@@ -95,6 +98,7 @@ class TeacherController extends Controller
             $teacher->update([
                 'nip' => $validated['nip'],
                 'gender' => $validated['gender'],
+                'position' => $validated['position'] ?? null,
             ]);
         });
 

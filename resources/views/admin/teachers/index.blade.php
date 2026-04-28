@@ -57,6 +57,8 @@
                                 Email</th>
                             <th class="px-4 sm:px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">L/P
                             </th>
+                            <th class="px-4 sm:px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Jabatan
+                            </th>
                             <th
                                 class="px-4 sm:px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider text-right">
                                 Aksi</th>
@@ -78,6 +80,9 @@
                                 </td>
                                 <td class="px-4 sm:px-6 py-4 text-gray-500">
                                     {{ $teacher->gender == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
+                                <td class="px-4 sm:px-6 py-4 text-gray-600 font-bold italic">
+                                    {{ $teacher->position ?? '-' }}
+                                </td>
                                 <td class="px-4 sm:px-6 py-4 text-right space-x-2 sm:space-x-3 whitespace-nowrap">
                                     <a href="{{ route('admin.teachers.edit', $teacher) }}"
                                         class="text-indigo-600 hover:text-indigo-900 font-medium text-xs sm:text-sm">Edit</a>

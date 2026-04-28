@@ -82,5 +82,50 @@
             @endforeach
         </tbody>
     </table>
+
+    <div style="margin-top: 20px;">
+        <h3>KETERANGAN / CATATAN</h3>
+        <table style="width: 100%;">
+            <thead>
+                <tr>
+                    <th style="width: 20%;">Tanggal</th>
+                    <th style="width: 25%;">Nama Pegawai</th>
+                    <th style="width: 15%;">Status</th>
+                    <th style="width: 40%;">Keterangan</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php $hasDescription = false; @endphp
+                @foreach($personnel as $person)
+                    @for($i = 1; $i <= $daysInMonth; $i++)
+                        @php
+                            $attendance = isset($attendanceData[$person->id][$i]) ? $attendanceData[$person->id][$i]->first() : null;
+                        @endphp
+                        @if($attendance && $attendance->description)
+                            @php $hasDescription = true; @endphp
+                            <tr>
+                                <td>{{ Carbon\Carbon::parse($attendance->date)->format('d M Y') }}</td>
+                                <td style="text-align: left; padding-left: 5px;">{{ $person->name }}</td>
+                                <td>
+                                    @switch($attendance->status)
+                                        @case('present') Hadir @break
+                                        @case('sick') Sakit @break
+                                        @case('permission') Izin @break
+                                        @case('absent') Alfa @break
+                                    @endswitch
+                                </td>
+                                <td style="text-align: left; padding-left: 5px;">{{ $attendance->description }}</td>
+                            </tr>
+                        @endif
+                    @endfor
+                @endforeach
+                @if(!$hasDescription)
+                    <tr>
+                        <td colspan="4" style="padding: 10px; color: #666;">Tidak ada keterangan tambahan.</td>
+                    </tr>
+                @endif
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

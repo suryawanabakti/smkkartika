@@ -55,6 +55,23 @@ class PersonnelAttendanceController extends Controller
         return view('admin.attendance.personnel_recap', compact('personnel', 'attendanceData', 'month', 'year', 'daysInMonth', 'startDate'));
     }
 
+    public function updateRecap(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'date' => 'required|date',
+            'status' => 'required|in:present,sick,permission,absent',
+            'description' => 'nullable|string'
+        ]);
+
+        $attendance = PersonnelAttendance::updateOrCreate(
+            ['user_id' => $request->user_id, 'date' => $request->date],
+            ['status' => $request->status, 'description' => $request->description]
+        );
+
+        return back()->with('success', 'Data kehadiran berhasil diperbarui.');
+    }
+
     public function store(Request $request)
     {
         $request->validate([

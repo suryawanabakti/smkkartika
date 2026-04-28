@@ -97,7 +97,7 @@
                 data: {
                     labels: {!! json_encode($attendanceTrend['labels']) !!},
                     datasets: [
-                        {
+{{-- {
                             label: 'Siswa',
                             data: {!! json_encode($attendanceTrend['students']) !!},
                             borderColor: '#10b981',
@@ -110,7 +110,7 @@
                             pointHoverRadius: 8,
                             tension: 0.4,
                             fill: true
-                        },
+                        }, --}}
                         {
                             label: 'Pegawai',
                             data: {!! json_encode($attendanceTrend['personnel']) !!},
@@ -285,7 +285,7 @@
 
         <!-- Attendance Stats Today -->
         <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="p-6 bg-white rounded-xl border border-gray-100 shadow-sm">
+{{-- <div class="p-6 bg-white rounded-xl border border-gray-100 shadow-sm">
                 <h3 class="text-sm font-black text-gray-800 uppercase tracking-widest mb-4">Ringkasan Siswa</h3>
                 <div class="space-y-3">
                     @foreach(['present' => ['Hadir', 'emerald'], 'absent' => ['Alfa', 'rose'], 'sick' => ['Sakit', 'amber'], 'permission' => ['Izin', 'indigo']] as $key => $meta)
@@ -295,7 +295,7 @@
                         </div>
                     @endforeach
                 </div>
-            </div>
+            </div> --}}
 
             <div class="p-6 bg-white rounded-xl border border-gray-100 shadow-sm">
                 <h3 class="text-sm font-black text-gray-800 uppercase tracking-widest mb-4">Ringkasan Pegawai</h3>

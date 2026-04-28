@@ -142,14 +142,14 @@
                             </svg>
                             Harian Pegawai
                         </a>
-                        <a href="{{ route('admin.attendance.students') }}"
+{{-- <a href="{{ route('admin.attendance.students') }}"
                             class="flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 {{ request()->routeIs('admin.attendance.students') ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20' : 'text-slate-500 hover:bg-slate-50 hover:text-emerald-600' }}">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                             </svg>
                             Harian Siswa
-                        </a>
+                        </a> --}}
 
                         <div class="px-4 py-4 text-[10px] font-extrabold tracking-widest text-slate-500 uppercase">
                             Laporan</div>
@@ -161,14 +161,14 @@
                             </svg>
                             Rekap Pegawai
                         </a>
-                        <a href="{{ route('admin.attendance.students.recap') }}"
+{{-- <a href="{{ route('admin.attendance.students.recap') }}"
                             class="flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 {{ request()->routeIs('admin.attendance.students.recap') ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20' : 'text-slate-500 hover:bg-slate-50 hover:text-emerald-600' }}">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.247 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                             </svg>
                             Rekap Siswa
-                        </a>
+                        </a> --}}
 
                         <div class="px-4 py-4 text-[10px] font-extrabold tracking-widest text-slate-500 uppercase">
                             Pengaturan</div>
@@ -230,22 +230,22 @@
 
                         <div class="px-4 py-4 text-[10px] font-extrabold tracking-widest text-slate-500 uppercase">
                             Manajemen Kelas</div>
-                        <a href="{{ route('teacher.students.index') }}"
+{{-- <a href="{{ route('teacher.students.index') }}"
                             class="flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 {{ request()->routeIs('teacher.students.index') ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20' : 'text-slate-500 hover:bg-slate-50 hover:text-emerald-600' }}">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 01-9-3.833M18.732 7.961a5 5 0 11-9.047-4.461 5 5 0 019.047 4.461z" />
                             </svg>
                             Absensi Siswa
-                        </a>
-                        <a href="{{ route('teacher.students.recap') }}"
+                        </a> --}}
+{{-- <a href="{{ route('teacher.students.recap') }}"
                             class="flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 {{ request()->routeIs('teacher.students.recap') ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20' : 'text-slate-500 hover:bg-slate-50 hover:text-emerald-600' }}">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 17v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2m32-2v2m-9-7a4 4 0 11-8 0 4 4 0 018 0zM2 9a4 4 0 118 0 4 4 0 01-8 0zm9 2a4 4 0 100-8 4 4 0 000 8zm-9 4a4 4 0 11-8 0 4 4 0 018 0z" />
                             </svg>
                             Rekap Siswa
-                        </a>
+                        </a> --}}
                     @endif
 
                     @if (Auth::user()->isStaff())

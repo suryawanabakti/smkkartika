@@ -18,6 +18,7 @@
                 <th>No</th>
                 <th>Nama</th>
                 <th>NIP</th>
+                <th>Jabatan</th>
                 <th>Email</th>
                 <th>L/P</th>
             </tr>
@@ -28,6 +29,7 @@
                 <td>{{ $key + 1 }}</td>
                 <td>{{ $teacher->user->name }}</td>
                 <td>{{ $teacher->nip }}</td>
+                <td>{{ $teacher->position ?? '-' }}</td>
                 <td>{{ $teacher->user->email }}</td>
                 <td>{{ $teacher->gender == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
             </tr>
