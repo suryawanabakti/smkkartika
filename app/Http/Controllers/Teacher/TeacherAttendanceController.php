@@ -42,6 +42,8 @@ class TeacherAttendanceController extends Controller
         $request->validate([
             'latitude' => 'required|numeric|between:-90,90',
             'longitude' => 'required|numeric|between:-180,180',
+            'status' => 'required|in:present,sick,permission,absent',
+            'description' => 'nullable|string|max:255',
         ]);
 
         $user = Auth::user();
@@ -52,42 +54,60 @@ class TeacherAttendanceController extends Controller
             ->first();
             
         if ($existing) {
-            return back()->with('error', 'Anda sudah melakukan absensi masuk hari ini.');
+            return back()->with('error', 'Anda sudah melakukan absensi hari ini.');
         }
 
-        // Validate minimum check-in time
-        $minCheckIn = SchoolSetting::get('min_check_in_time', '07:00');
         $now = now();
-        $minTime = Carbon::today()->setTimeFromTimeString($minCheckIn);
-        
-        if ($now->lt($minTime)) {
-            return back()->with('error', 'Belum waktunya absen masuk. Jam masuk minimal pukul ' . $minCheckIn . ' WITA.');
+        $minCheckOut = SchoolSetting::get('min_check_out_time', '15:00');
+        if ($now->format('H:i') > $minCheckOut) {
+            return back()->with('error', 'Gagal absen. Waktu absensi hari ini telah berakhir (sudah lewat jam pulang pukul ' . $minCheckOut . ').');
         }
 
-        // Validate distance to school
-        $schoolLat = (float) SchoolSetting::get('school_latitude', -5.1436);
-        $schoolLng = (float) SchoolSetting::get('school_longitude', 119.4667);
-        $schoolRadius = (int) SchoolSetting::get('school_radius', 200);
+        $status = $request->status;
 
-        $userLat = (float) $request->latitude;
-        $userLng = (float) $request->longitude;
+        // Radius check only for 'present' status
+        if ($status === 'present') {
+            // Validate minimum check-in time
+            $minCheckIn = SchoolSetting::get('min_check_in_time', '07:00');
+            $minTime = Carbon::today()->setTimeFromTimeString($minCheckIn);
+            
+            if ($now->lt($minTime)) {
+                return back()->with('error', 'Belum waktunya absen masuk. Jam masuk minimal pukul ' . $minCheckIn . ' WITA.');
+            }
 
-        $distance = $this->haversineDistance($userLat, $userLng, $schoolLat, $schoolLng);
+            // Validate distance to school
+            $schoolLat = (float) SchoolSetting::get('school_latitude', -5.1436);
+            $schoolLng = (float) SchoolSetting::get('school_longitude', 119.4667);
+            $schoolRadius = (int) SchoolSetting::get('school_radius', 200);
 
-        if ($distance > $schoolRadius) {
-            return back()->with('error', 'Anda berada di luar radius sekolah (' . round($distance) . 'm dari sekolah, batas: ' . $schoolRadius . 'm). Silakan mendekat ke area sekolah.');
+            $userLat = (float) $request->latitude;
+            $userLng = (float) $request->longitude;
+
+            $distance = $this->haversineDistance($userLat, $userLng, $schoolLat, $schoolLng);
+
+            if ($distance > $schoolRadius) {
+                return back()->with('error', 'Gagal absen Hadir. Anda berada di luar radius sekolah (' . round($distance) . 'm dari sekolah, batas: ' . $schoolRadius . 'm).');
+            }
         }
 
         PersonnelAttendance::create([
             'user_id' => $user->id,
             'date' => $today,
             'check_in_time' => $now,
-            'status' => 'present',
-            'latitude' => $userLat,
-            'longitude' => $userLng,
+            'status' => $status,
+            'description' => $request->description,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
         ]);
 
-        return back()->with('success', 'Absensi masuk berhasil dicatat pukul ' . $now->format('H:i') . '. Jarak: ' . round($distance) . 'm.');
+        $statusLabel = [
+            'present' => 'Hadir',
+            'sick' => 'Sakit',
+            'permission' => 'Izin',
+            'absent' => 'Alfa',
+        ][$status];
+
+        return back()->with('success', "Absensi ($statusLabel) berhasil dicatat.");
     }
 
     public function checkout(Request $request)

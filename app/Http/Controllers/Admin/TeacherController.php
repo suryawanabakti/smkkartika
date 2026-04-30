@@ -54,6 +54,9 @@ class TeacherController extends Controller
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
                 'role_id' => $teacherRole->id,
+                'nip' => $validated['nip'],
+                'gender' => $validated['gender'],
+                'position' => $validated['position'] ?? null,
             ]);
 
             Teacher::create([
@@ -87,6 +90,9 @@ class TeacherController extends Controller
             $userData = [
                 'name' => $validated['name'],
                 'email' => $validated['email'],
+                'nip' => $validated['nip'],
+                'gender' => $validated['gender'],
+                'position' => $validated['position'] ?? null,
             ];
 
             if ($request->filled('password')) {

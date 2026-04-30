@@ -53,6 +53,8 @@ class StaffController extends Controller
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
                 'role_id' => $staffRole->id,
+                'nip' => $validated['nip'],
+                'gender' => $validated['gender'],
             ]);
 
             Staff::create([
@@ -84,6 +86,8 @@ class StaffController extends Controller
             $userData = [
                 'name' => $validated['name'],
                 'email' => $validated['email'],
+                'nip' => $validated['nip'],
+                'gender' => $validated['gender'],
             ];
 
             if ($request->filled('password')) {

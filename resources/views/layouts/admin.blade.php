@@ -134,6 +134,15 @@
                         </svg>
                         Student Recap
                     </a>
+                    <div class="pt-4 pb-2 text-xs font-semibold tracking-wider text-indigo-300 uppercase">Account</div>
+                    <a href="{{ route('profile.index') }}"
+                        class="flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('profile.*') ? 'bg-indigo-900 text-white' : 'text-indigo-100 hover:bg-indigo-600 hover:text-white' }}">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        My Profile
+                    </a>
                 </nav>
 
                 <!-- Sidebar Footer -->

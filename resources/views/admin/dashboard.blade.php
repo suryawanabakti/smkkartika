@@ -201,6 +201,17 @@
                         @csrf
                         <input type="hidden" name="latitude" id="admin-lat">
                         <input type="hidden" name="longitude" id="admin-lng">
+                        
+                        <div id="admin-status-container" class="hidden mb-3 space-y-2">
+                            <select name="status" id="admin-status-select" class="w-full py-2 bg-white/20 border-white/20 rounded-xl text-[10px] font-bold text-white placeholder-white/50 focus:ring-0 focus:border-white/40">
+                                <option value="present" class="text-gray-800" id="admin-opt-present">Hadir</option>
+                                <option value="sick" class="text-gray-800">Sakit</option>
+                                <option value="permission" class="text-gray-800">Izin</option>
+                                <option value="absent" class="text-gray-800">Alfa</option>
+                            </select>
+                            <input type="text" name="description" placeholder="Keterangan (Opsional)" class="w-full py-2 bg-white/10 border-white/10 rounded-xl text-[10px] font-bold text-white placeholder-white/50 focus:ring-0 focus:border-white/40">
+                        </div>
+
                         <button type="submit" id="admin-btn-absen" disabled
                             class="w-full py-3 bg-white text-indigo-600 rounded-xl font-black text-xs shadow-xl transition-all flex items-center justify-center gap-2 cursor-not-allowed opacity-50">
                             MENCARI LOKASI...
@@ -257,24 +268,45 @@
                             const latInput = document.getElementById('admin-lat');
                             const lngInput = document.getElementById('admin-lng');
                             const btn = document.getElementById('admin-btn-absen');
+                            const statusContainer = document.getElementById('admin-status-container');
+                            const statusSelect = document.getElementById('admin-status-select');
+                            const optPresent = document.getElementById('admin-opt-present');
 
                             if (latInput) latInput.value = lat;
                             if (lngInput) lngInput.value = lng;
 
                             if (btn) {
+                                btn.disabled = false;
+                                btn.style.opacity = '1';
+                                btn.style.cursor = 'pointer';
+                                
+                                if (statusContainer) statusContainer.classList.remove('hidden');
+
                                 if (dist <= schoolRadius) {
-                                    btn.disabled = false;
-                                    btn.style.opacity = '1';
-                                    btn.style.cursor = 'pointer';
+                                    if (optPresent) {
+                                        optPresent.disabled = false;
+                                        optPresent.textContent = 'Hadir (Dalam Radius)';
+                                    }
                                     if (btn.innerText.includes('MENCARI')) {
                                         btn.innerText = 'ABSEN MASUK';
                                     } else if (btn.innerText.includes('PULANG')) {
                                         btn.innerText = 'ABSEN PULANG';
                                     }
                                 } else {
-                                    btn.disabled = true;
-                                    btn.innerText = 'DILUAR RADIUS';
-                                    btn.style.opacity = '0.5';
+                                    if (btn.innerText.includes('PULANG')) {
+                                        btn.disabled = true;
+                                        btn.innerText = 'DILUAR RADIUS';
+                                        btn.style.opacity = '0.5';
+                                    } else {
+                                        if (optPresent) {
+                                            optPresent.disabled = true;
+                                            optPresent.textContent = 'Hadir (Hanya di Lokasi)';
+                                            if (statusSelect.value === 'present') {
+                                                statusSelect.value = 'sick';
+                                            }
+                                        }
+                                        btn.innerText = 'KIRIM KETERANGAN';
+                                    }
                                 }
                             }
                         });

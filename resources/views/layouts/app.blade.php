@@ -28,7 +28,7 @@
     </style>
 </head>
 
-<body class="h-full antialiased text-slate-900" x-data="{ 
+<body class="h-full antialiased text-slate-900" x-data="{
     sidebarOpen: false,
     now: new Date(),
     init() {
@@ -121,7 +121,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            Harian Pegawai
+                            Harian Personel
                         </a>
                         {{-- <a href="{{ route('admin.attendance.students') }}"
                             class="flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 {{ request()->routeIs('admin.attendance.students') ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20' : 'text-slate-500 hover:bg-slate-50 hover:text-emerald-600' }}">
@@ -140,7 +140,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 17v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2m32 4v-2a4 4 0 00-4-4h-5a4 4 0 00-4 4v2m-13-4h13m-13 0a5 5 0 110-10 5 5 0 010 10zm13 0a5 5 0 110-10 5 5 0 010 10z" />
                             </svg>
-                            Rekap Pegawai
+                            Rekap Personel
                         </a>
                         {{-- <a href="{{ route('admin.attendance.students.recap') }}"
                             class="flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 {{ request()->routeIs('admin.attendance.students.recap') ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20' : 'text-slate-500 hover:bg-slate-50 hover:text-emerald-600' }}">
@@ -260,6 +260,16 @@
                         </a>
                     @endif
 
+                    <div class="px-4 py-4 text-[10px] font-extrabold tracking-widest text-slate-500 uppercase">Akun
+                    </div>
+                    <a href="{{ route('profile.index') }}"
+                        class="flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 {{ request()->routeIs('profile.*') ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20' : 'text-slate-500 hover:bg-slate-50 hover:text-emerald-600' }}">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        Profil Saya
+                    </a>
                 </nav>
 
                 <!-- Sidebar User Info -->
@@ -294,13 +304,14 @@
 
                 <div class="flex items-center space-x-4 sm:space-x-6 lg:ml-auto">
                     <div class="flex flex-col items-end">
-                        <span class="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest" 
-                              x-text="now.toLocaleDateString('en-US', { weekday: 'long' })"></span>
+                        <span class="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest"
+                            x-text="now.toLocaleDateString('en-US', { weekday: 'long' })"></span>
                         <div class="flex items-center gap-2">
-                            <span class="text-xs sm:text-sm font-bold text-slate-600" 
-                                  x-text="now.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })"></span>
-                            <span class="hidden sm:inline-block text-[10px] font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-100 shadow-sm" 
-                                  x-text="now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' })"></span>
+                            <span class="text-xs sm:text-sm font-bold text-slate-600"
+                                x-text="now.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })"></span>
+                            <span
+                                class="hidden sm:inline-block text-[10px] font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-100 shadow-sm"
+                                x-text="now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' })"></span>
                         </div>
                     </div>
                     <div class="w-px h-8 bg-slate-200"></div>

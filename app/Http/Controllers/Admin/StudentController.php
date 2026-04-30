@@ -61,6 +61,7 @@ class StudentController extends Controller
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
                 'role_id' => $studentRole->id,
+                'gender' => $validated['gender'],
             ]);
 
             Student::create([
@@ -95,6 +96,7 @@ class StudentController extends Controller
             $userData = [
                 'name' => $validated['name'],
                 'email' => $validated['email'],
+                'gender' => $validated['gender'],
             ];
 
             if ($request->filled('password')) {

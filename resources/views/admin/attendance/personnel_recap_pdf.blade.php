@@ -126,6 +126,18 @@
                 @endif
             </tbody>
         </table>
+    <div style="margin-top: 40px; width: 100%;">
+        <table style="border: none; width: 100%;">
+            <tr>
+                <td style="border: none; width: 60%;"></td>
+                <td style="border: none; width: 40%; text-align: center; font-size: 11px;">
+                    <p>Makassar, {{ Carbon\Carbon::now()->translatedFormat('d F Y') }}</p>
+                    <p style="font-weight: bold; margin-top: 5px;">Tata Usaha (Admin)</p>
+                    <div style="height: 60px;"></div>
+                    <p style="font-weight: bold; text-decoration: underline;">(..........................................)</p>
+                </td>
+            </tr>
+        </table>
     </div>
 </body>
 </html>

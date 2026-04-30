@@ -100,16 +100,50 @@
             </div>
 
             <!-- Attendance Form -->
+            @php
+                $isPastPulang = now()->format('H:i') > $workHours['min_check_out'];
+            @endphp
+
             @if(!$todayAttendance)
-                {{-- STATE 1: Belum check-in --}}
+                @if($isPastPulang)
+                    <div class="p-6 bg-rose-50 border border-rose-100 rounded-2xl sm:rounded-[2rem] text-center space-y-3">
+                        <div class="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <h4 class="text-base sm:text-lg font-black text-rose-900 uppercase tracking-tight">Waktu Absensi Berakhir</h4>
+                        <p class="text-xs sm:text-sm text-rose-600 font-medium leading-relaxed">Waktu absensi masuk sudah berakhir (lewat jam {{ $workHours['min_check_out'] }} WITA). Anda tercatat Alfa hari ini jika tidak hadir.</p>
+                    </div>
+                @else
+                    {{-- STATE 1: Belum check-in --}}
                 <form id="attendance-form" action="{{ route('staff.attendance.store') }}" method="POST">
                     @csrf
                     <input type="hidden" name="latitude" id="input-latitude">
                     <input type="hidden" name="longitude" id="input-longitude">
+                    
+                    <div class="space-y-4 mb-6">
+                        <div class="space-y-1">
+                            <label for="status" class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Keterangan Kehadiran</label>
+                            <select name="status" id="status-select" required
+                                class="w-full rounded-xl border-slate-200 focus:border-indigo-500 focus:ring-indigo-500 font-bold text-sm">
+                                <option value="present" id="opt-present">Hadir (Hanya di Lokasi)</option>
+                                <option value="sick">Sakit</option>
+                                <option value="permission">Izin</option>
+                                <option value="absent">Alfa (Tidak Hadir)</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-1" id="description-container">
+                            <label for="description" class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Alasan / Keterangan (Opsional)</label>
+                            <textarea name="description" id="description" rows="2"
+                                class="w-full rounded-xl border-slate-200 focus:border-indigo-500 focus:ring-indigo-500 text-sm font-medium"
+                                placeholder="Tulis alasan jika sakit atau izin..."></textarea>
+                        </div>
+                    </div>
+
                     <button type="submit" id="btn-absen" disabled
                         class="w-full py-3.5 sm:py-4 bg-slate-300 text-white rounded-2xl font-bold shadow-lg transition-all flex items-center justify-center gap-2 cursor-not-allowed text-sm sm:text-base">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg>
-                        <span id="btn-text">Absen Masuk</span>
+                        <span id="btn-text">Menunggu Lokasi...</span>
                     </button>
                 </form>
             @elseif(!$todayAttendance->check_out_time)
@@ -334,20 +368,43 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>`;
         }
 
-        // Update button
+        // Update button and status options
         const btn = document.getElementById('btn-absen');
         const btnText = document.getElementById('btn-text');
+        const statusSelect = document.getElementById('status-select');
+        const optPresent = document.getElementById('opt-present');
         const isCheckout = !!document.getElementById('checkout-form');
-        const actionLabel = isCheckout ? 'Absen Pulang' : 'Absen Masuk';
+        const actionLabel = isCheckout ? 'Absen Pulang' : 'Kirim Absensi';
+        
         if (btn) {
+            btn.disabled = false; // Always allow submission now (for sick/permission/absent)
+            
             if (isInRange) {
-                btn.disabled = false;
                 btn.className = 'w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold shadow-lg shadow-emerald-100 hover:bg-emerald-700 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer';
                 btnText.textContent = actionLabel;
+                
+                if (statusSelect && optPresent) {
+                    optPresent.disabled = false;
+                    optPresent.textContent = 'Hadir (Dalam Radius)';
+                }
             } else {
-                btn.disabled = true;
-                btn.className = 'w-full py-4 bg-slate-300 text-white rounded-2xl font-bold shadow-lg transition-all flex items-center justify-center gap-2 cursor-not-allowed';
-                btnText.textContent = 'Di Luar Radius Sekolah';
+                if (isCheckout) {
+                    // Outside radius for checkout is still restricted
+                    btn.disabled = true;
+                    btn.className = 'w-full py-4 bg-slate-300 text-white rounded-2xl font-bold shadow-lg transition-all flex items-center justify-center gap-2 cursor-not-allowed';
+                    btnText.textContent = 'Di Luar Radius Sekolah';
+                } else {
+                    btn.className = 'w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold shadow-lg shadow-indigo-100 hover:bg-indigo-700 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer';
+                    btnText.textContent = 'Kirim Keterangan';
+                    
+                    if (statusSelect && optPresent) {
+                        optPresent.disabled = true;
+                        optPresent.textContent = 'Hadir (Hanya di Lokasi - Nonaktif)';
+                        if (statusSelect.value === 'present') {
+                            statusSelect.value = 'sick'; // Default to sick if present was selected but now outside
+                        }
+                    }
+                }
             }
         }
 

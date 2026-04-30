@@ -37,12 +37,12 @@ class PersonnelAttendanceController extends Controller
     {
         $month = $request->get('month', date('n'));
         $year = $request->get('year', date('Y'));
-        
+
         $startDate = Carbon::createFromDate($year, $month, 1);
         $daysInMonth = $startDate->daysInMonth;
 
-        $personnel = User::whereHas('role', function($q) {
-            $q->whereIn('name', ['admin', 'teacher']);
+        $personnel = User::whereHas('role', function ($q) {
+            $q->whereIn('name', ['admin', 'teacher', 'staff']);
         })->get();
 
         $attendanceData = PersonnelAttendance::whereYear('date', $year)
@@ -86,29 +86,65 @@ class PersonnelAttendanceController extends Controller
         $request->validate([
             'latitude' => 'required|numeric|between:-90,90',
             'longitude' => 'required|numeric|between:-180,180',
+            'status' => 'required|in:present,sick,permission,absent',
+            'description' => 'nullable|string|max:255',
         ]);
 
         $user = auth()->user();
         $today = Carbon::today()->toDateString();
-        
+
         $existing = PersonnelAttendance::where('user_id', $user->id)
             ->whereDate('date', $today)
             ->first();
-            
+
         if ($existing) {
-            return back()->with('error', 'Anda sudah melakukan absensi masuk hari ini.');
+            return back()->with('error', 'Anda sudah melakukan absensi hari ini.');
+        }
+
+        // Block attendance if past check-out time
+        $minCheckOut = \App\Models\SchoolSetting::get('min_check_out_time', '15:00');
+        if (now()->format('H:i') > $minCheckOut) {
+            return back()->with('error', 'Gagal absen. Waktu absensi hari ini telah berakhir (sudah lewat jam pulang pukul ' . $minCheckOut . ').');
+        }
+
+        $status = $request->status;
+
+        if ($status === 'present') {
+            // Radius check for 'present'
+            $schoolLat = (float) \App\Models\SchoolSetting::get('school_latitude', -5.1436);
+            $schoolLng = (float) \App\Models\SchoolSetting::get('school_longitude', 119.4667);
+            $schoolRadius = (int) \App\Models\SchoolSetting::get('school_radius', 200);
+
+            $distance = $this->calculateDistance($request->latitude, $request->longitude, $schoolLat, $schoolLng);
+
+            if ($distance > $schoolRadius) {
+                return back()->with('error', 'Gagal absen Hadir. Anda berada di luar radius sekolah.');
+            }
         }
 
         PersonnelAttendance::create([
             'user_id' => $user->id,
             'date' => $today,
             'check_in_time' => now(),
-            'status' => 'present',
+            'status' => $status,
+            'description' => $request->description,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
         ]);
 
-        return back()->with('success', 'Absensi masuk berhasil dicatat.');
+        return back()->with('success', 'Absensi berhasil dicatat.');
+    }
+
+    private function calculateDistance($lat1, $lng1, $lat2, $lng2)
+    {
+        $earthRadius = 6371000;
+        $dLat = deg2rad($lat2 - $lat1);
+        $dLng = deg2rad($lng2 - $lng1);
+        $a = sin($dLat / 2) * sin($dLat / 2) +
+            cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
+            sin($dLng / 2) * sin($dLng / 2);
+        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+        return $earthRadius * $c;
     }
 
     public function checkout(Request $request)
@@ -144,11 +180,11 @@ class PersonnelAttendanceController extends Controller
     {
         $month = $request->get('month', date('n'));
         $year = $request->get('year', date('Y'));
-        
+
         $startDate = Carbon::createFromDate($year, $month, 1);
         $daysInMonth = $startDate->daysInMonth;
 
-        $personnel = User::whereHas('role', function($q) {
+        $personnel = User::whereHas('role', function ($q) {
             $q->whereIn('name', ['admin', 'teacher', 'staff']);
         })->get();
 
@@ -160,6 +196,6 @@ class PersonnelAttendanceController extends Controller
             }]);
 
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.attendance.personnel_recap_pdf', compact('personnel', 'attendanceData', 'month', 'year', 'daysInMonth', 'startDate'))->setPaper('a4', 'landscape');
-        return $pdf->download('rekap-kehadiran-pegawai-'.$year.'-'.$month.'.pdf');
+        return $pdf->download('rekap-kehadiran-pegawai-' . $year . '-' . $month . '.pdf');
     }
 }

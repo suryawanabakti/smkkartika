@@ -63,6 +63,11 @@
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2m32-2v2m-9-7a4 4 0 11-8 0 4 4 0 018 0zM2 9a4 4 0 118 0 4 4 0 01-8 0zm9 2a4 4 0 100-8 4 4 0 000 8zm-9 4a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                         Student Recap
                     </a>
+                    <div class="px-4 py-4 text-[10px] font-extrabold tracking-widest text-slate-400 uppercase">Account</div>
+                    <a href="{{ route('profile.index') }}" class="flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 {{ request()->routeIs('profile.*') ? 'bg-indigo-50 text-indigo-700' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                        My Profile
+                    </a>
                 </nav>
 
                 <!-- Sidebar User Info -->
