@@ -63,6 +63,7 @@ class DashboardController extends Controller
             'latitude' => (float) \App\Models\SchoolSetting::get('school_latitude', -5.1436),
             'longitude' => (float) \App\Models\SchoolSetting::get('school_longitude', 119.4667),
             'radius' => (int) \App\Models\SchoolSetting::get('school_radius', 200),
+            'min_check_out' => \App\Models\SchoolSetting::get('min_check_out_time', '15:00'),
         ];
 
         return view('admin.dashboard', compact('stats', 'myAttendance', 'schoolSettings', 'attendanceTrend'));

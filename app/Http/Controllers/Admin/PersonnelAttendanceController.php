@@ -101,7 +101,6 @@ class PersonnelAttendanceController extends Controller
             return back()->with('error', 'Anda sudah melakukan absensi hari ini.');
         }
 
-        // Block attendance if past check-out time
         $minCheckOut = \App\Models\SchoolSetting::get('min_check_out_time', '15:00');
         if (now()->format('H:i') > $minCheckOut) {
             return back()->with('error', 'Gagal absen. Waktu absensi hari ini telah berakhir (sudah lewat jam pulang pukul ' . $minCheckOut . ').');

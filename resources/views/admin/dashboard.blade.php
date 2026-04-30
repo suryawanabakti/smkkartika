@@ -196,7 +196,17 @@
             </div>
 
             <div class="relative z-10">
+                @php
+                    $isPastPulang = now()->format('H:i') > $schoolSettings['min_check_out'];
+                @endphp
+
                 @if(!$myAttendance)
+                    @if($isPastPulang)
+                        <div class="p-3 bg-white/10 rounded-xl border border-white/5 text-center mb-2">
+                            <p class="text-[10px] font-black uppercase text-indigo-100">Waktu Absensi Berakhir</p>
+                            <p class="text-[9px] font-bold mt-1 text-white/80 leading-relaxed">Sudah lewat jam {{ $schoolSettings['min_check_out'] }} WITA</p>
+                        </div>
+                    @else
                     <form action="{{ route('admin.attendance.store') }}" method="POST" id="admin-attendance-form">
                         @csrf
                         <input type="hidden" name="latitude" id="admin-lat">
@@ -217,6 +227,7 @@
                             MENCARI LOKASI...
                         </button>
                     </form>
+                    @endif
                 @elseif(!$myAttendance->check_out_time)
                     <div class="space-y-2">
                         <div class="px-3 py-2 bg-white/10 rounded-xl flex items-center justify-between border border-white/5">

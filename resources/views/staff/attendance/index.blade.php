@@ -146,6 +146,7 @@
                         <span id="btn-text">Menunggu Lokasi...</span>
                     </button>
                 </form>
+                @endif
             @elseif(!$todayAttendance->check_out_time)
                 {{-- STATE 2: Sudah check-in, belum check-out --}}
                 <div class="space-y-4">
