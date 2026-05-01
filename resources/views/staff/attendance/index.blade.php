@@ -225,7 +225,19 @@
                                 </div>
                             </td>
                             <td class="px-4 sm:px-8 py-4 sm:py-5">
-                                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 sm:px-3 sm:py-1 bg-emerald-50 text-emerald-600 rounded-lg text-[9px] sm:text-[10px] font-black uppercase tracking-widest border border-emerald-100">Hadir</span>
+                                @switch($attendance->status)
+                                    @case('present')
+                                        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 sm:px-3 sm:py-1 bg-emerald-50 text-emerald-600 rounded-lg text-[9px] sm:text-[10px] font-black uppercase tracking-widest border border-emerald-100">Hadir</span>
+                                        @break
+                                    @case('sick')
+                                        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 sm:px-3 sm:py-1 bg-amber-50 text-amber-600 rounded-lg text-[9px] sm:text-[10px] font-black uppercase tracking-widest border border-amber-100">Sakit</span>
+                                        @break
+                                    @case('permission')
+                                        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 sm:px-3 sm:py-1 bg-blue-50 text-blue-600 rounded-lg text-[9px] sm:text-[10px] font-black uppercase tracking-widest border border-blue-100">Izin</span>
+                                        @break
+                                    @default
+                                        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 sm:px-3 sm:py-1 bg-rose-50 text-rose-600 rounded-lg text-[9px] sm:text-[10px] font-black uppercase tracking-widest border border-rose-100">Alfa</span>
+                                @endswitch
                             </td>
                             <td class="px-4 sm:px-8 py-4 sm:py-5 hidden md:table-cell">
                                 @if($attendance->latitude && $attendance->longitude)

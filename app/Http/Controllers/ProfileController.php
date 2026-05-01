@@ -12,7 +12,7 @@ class ProfileController extends Controller
     {
         $user = auth()->user();
         $layout = $this->getLayout();
-        
+
         return view('profile.index', compact('user', 'layout'));
     }
 
@@ -25,7 +25,7 @@ class ProfileController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'nip' => ['nullable', 'string', 'max:50'],
             'gender' => ['nullable', 'in:L,P'],
-            'position' => ['nullable', 'string', 'max:255'],
+
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
         ]);
 
@@ -34,7 +34,7 @@ class ProfileController extends Controller
             'email' => $validated['email'],
             'nip' => $validated['nip'],
             'gender' => $validated['gender'],
-            'position' => $validated['position'],
+
         ];
 
         if ($request->filled('password')) {

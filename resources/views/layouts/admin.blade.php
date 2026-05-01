@@ -169,8 +169,111 @@
                 </button>
 
                 <div class="flex items-center space-x-4">
-                    <div class="flex items-center gap-3">
-                        <span class="text-xs font-bold text-gray-500 uppercase tracking-widest" 
+                    <!-- Notifications -->
+                    <div class="relative" x-data="{ open: false }">
+                        @php
+                            $personnelAlerts = \App\Models\PersonnelAttendance::with('user')
+                                ->where('date', \Carbon\Carbon::today())
+                                ->whereIn('status', ['absent', 'sick', 'permission'])
+                                ->get()
+                                ->map(function($item) {
+                                    $item->type_label = 'Pegawai';
+                                    $item->name = $item->user->name ?? 'Unknown';
+                                    return $item;
+                                });
+
+                            $studentAlerts = \App\Models\StudentAttendance::with('student.user')
+                                ->where('date', \Carbon\Carbon::today())
+                                ->whereIn('status', ['absent', 'sick', 'permission'])
+                                ->get()
+                                ->map(function($item) {
+                                    $item->type_label = 'Siswa';
+                                    $item->name = $item->student->user->name ?? 'Unknown';
+                                    return $item;
+                                });
+
+                            $todayAlerts = $personnelAlerts->concat($studentAlerts)->sortByDesc('created_at')->take(10)->values();
+                        @endphp
+                        <button @click="open = !open" @click.away="open = false" class="relative p-2 text-gray-400 hover:text-indigo-600 transition-colors rounded-full hover:bg-indigo-50 focus:outline-none">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                            </svg>
+                            @if($todayAlerts->count() > 0)
+                                <span class="absolute top-1.5 right-1.5 flex h-2.5 w-2.5">
+                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500 border-2 border-white"></span>
+                                </span>
+                            @endif
+                        </button>
+
+                        <div x-show="open" x-cloak
+                            class="absolute right-0 mt-3 w-80 sm:w-96 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 overflow-hidden origin-top-right"
+                            x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 scale-95"
+                            x-transition:enter-end="opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-75"
+                            x-transition:leave-start="opacity-100 scale-100"
+                            x-transition:leave-end="opacity-0 scale-95">
+                            <div class="px-5 py-4 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
+                                <div>
+                                    <h3 class="text-sm font-bold text-gray-800">Notifikasi Hari Ini</h3>
+                                    <p class="text-[10px] text-gray-500 font-medium mt-0.5">Pegawai & Siswa</p>
+                                </div>
+                                @if($todayAlerts->count() > 0)
+                                    <span class="text-xs font-black text-rose-600 bg-rose-100 px-2 py-1 rounded-lg border border-rose-200">{{ $todayAlerts->count() }} Baru</span>
+                                @endif
+                            </div>
+                            <div class="max-h-96 overflow-y-auto divide-y divide-gray-50">
+                                @forelse($todayAlerts as $alert)
+                                    <div class="px-5 py-4 hover:bg-gray-50/50 transition-colors">
+                                        <div class="flex items-start gap-4">
+                                            <div class="shrink-0 mt-1">
+                                                @if($alert->status == 'sick')
+                                                    <div class="flex items-center justify-center w-10 h-10 rounded-full bg-amber-50 border border-amber-100 text-amber-600 shadow-sm">
+                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                                    </div>
+                                                @elseif($alert->status == 'permission')
+                                                    <div class="flex items-center justify-center w-10 h-10 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 shadow-sm">
+                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                                    </div>
+                                                @else
+                                                    <div class="flex items-center justify-center w-10 h-10 rounded-full bg-rose-50 border border-rose-100 text-rose-600 shadow-sm">
+                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                <div class="flex items-center justify-between gap-2">
+                                                    <p class="text-sm font-bold text-gray-800 truncate">{{ $alert->name }}</p>
+                                                    <span class="text-[9px] font-black uppercase tracking-widest text-gray-400 shrink-0">{{ $alert->created_at->format('H:i') }}</span>
+                                                </div>
+                                                <div class="flex items-center gap-2 mt-1.5">
+                                                    <span class="text-[10px] font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md">{{ $alert->type_label }}</span>
+                                                    <span class="text-[10px] font-black uppercase tracking-wider {{ $alert->status == 'sick' ? 'text-amber-600' : ($alert->status == 'permission' ? 'text-indigo-600' : 'text-rose-600') }}">
+                                                        {{ $alert->status == 'sick' ? 'Sakit' : ($alert->status == 'permission' ? 'Izin' : 'Alfa') }}
+                                                    </span>
+                                                </div>
+                                                @if($alert->description)
+                                                    <p class="text-xs text-gray-500 mt-2 italic line-clamp-1 border-l-2 border-gray-200 pl-2">"{{ $alert->description }}"</p>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <div class="px-5 py-10 flex flex-col items-center justify-center">
+                                        <div class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center mb-3">
+                                            <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                                        </div>
+                                        <p class="text-sm font-bold text-gray-500">Semua Hadir</p>
+                                        <p class="text-xs text-gray-400 mt-1">Belum ada catatan sakit, izin, atau alfa.</p>
+                                    </div>
+                                @endforelse
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+                        <span class="text-xs font-bold text-gray-500 uppercase tracking-widest hidden sm:inline" 
                               x-text="now.toLocaleDateString('en-US', { weekday: 'long' })"></span>
                         <span class="text-sm font-bold text-gray-700" 
                               x-text="now.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })"></span>

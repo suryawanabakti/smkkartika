@@ -23,7 +23,7 @@ class DashboardController extends Controller
         }
 
         $attendanceTrend = [
-            'labels' => array_map(function($date) {
+            'labels' => array_map(function ($date) {
                 return Carbon::parse($date)->format('d M');
             }, $last7Days),
             'students' => [],
@@ -66,6 +66,12 @@ class DashboardController extends Controller
             'min_check_out' => \App\Models\SchoolSetting::get('min_check_out_time', '15:00'),
         ];
 
-        return view('admin.dashboard', compact('stats', 'myAttendance', 'schoolSettings', 'attendanceTrend'));
+        $recentAttendance = PersonnelAttendance::with('user')
+            ->where('user_id', auth()->id())
+            ->latest()
+            ->limit(5)
+            ->get();
+
+        return view('admin.dashboard', compact('stats', 'myAttendance', 'schoolSettings', 'attendanceTrend', 'recentAttendance'));
     }
 }
