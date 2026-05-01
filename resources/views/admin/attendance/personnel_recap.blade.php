@@ -9,6 +9,7 @@
         selectedDate: '',
         selectedStatus: 'present',
         selectedDescription: '',
+        showEmailModal: false,
         openEdit(userId, userName, date, status, description) {
             this.selectedUserId = userId;
             this.selectedUser = userName;
@@ -72,6 +73,12 @@
                             </svg>
                             Cetak PDF
                         </a>
+                        <button type="button" @click="showEmailModal = true" class="px-4 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 transition-colors flex items-center gap-2">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            Kirim Excel
+                        </button>
                     </form>
                 </div>
             </div>
@@ -408,6 +415,77 @@
                                 <button type="button" @click="showModal = false"
                                     class="w-full py-4 bg-white text-slate-500 rounded-2xl font-bold border border-slate-100 hover:bg-slate-50 hover:text-slate-700 transition-all text-sm">
                                     Batalkan
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Email Modal -->
+        <div x-show="showEmailModal" x-cloak class="fixed inset-0 z-[100] overflow-y-auto" aria-labelledby="modal-title"
+            role="dialog" aria-modal="true">
+
+            <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+                <!-- Backdrop Overlay -->
+                <div x-show="showEmailModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
+                    x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200"
+                    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                    class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" @click="showEmailModal = false"
+                    aria-hidden="true"></div>
+
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+                <!-- Modal Panel -->
+                <div x-show="showEmailModal" x-transition:enter="ease-out duration-300"
+                    x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                    x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                    x-transition:leave="ease-in duration-200"
+                    x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                    x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                    class="relative inline-block align-bottom bg-white rounded-[2rem] text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full border border-slate-100 z-[110]">
+
+                    <form action="{{ route('admin.attendance.personnel.recap.send_email') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="month" value="{{ request('month', date('n')) }}">
+                        <input type="hidden" name="year" value="{{ request('year', date('Y')) }}">
+
+                        <div class="p-8">
+                            <div class="flex items-start justify-between mb-6">
+                                <div class="space-y-1">
+                                    <h3 class="text-xl font-bold text-slate-800" id="modal-title">Kirim Rekap via Email</h3>
+                                    <p class="text-xs font-medium text-slate-500">Kirim rekap kehadiran (Excel) ke email tujuan.</p>
+                                </div>
+                                <button type="button" @click="showEmailModal = false"
+                                    class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-xl transition-colors">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Email Tujuan</label>
+                                    <input type="email" name="email" required
+                                        class="w-full px-4 py-3 rounded-2xl border-2 border-slate-100 bg-slate-50/50 focus:bg-white focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-400 outline-none transition-all text-sm font-medium text-slate-700 placeholder:text-slate-300"
+                                        placeholder="contoh: kepsek@smkkartika.sch.id">
+                                </div>
+                            </div>
+
+                            <div class="mt-8 flex flex-col gap-3">
+                                <button type="submit"
+                                    class="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold shadow-lg shadow-emerald-200 hover:bg-emerald-700 hover:translate-y-[-2px] active:translate-y-[0px] transition-all text-sm flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                    </svg>
+                                    Kirim Sekarang
+                                </button>
+                                <button type="button" @click="showEmailModal = false"
+                                    class="w-full py-4 bg-white text-slate-500 rounded-2xl font-bold border border-slate-100 hover:bg-slate-50 hover:text-slate-700 transition-all text-sm">
+                                    Batal
                                 </button>
                             </div>
                         </div>

@@ -56,6 +56,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/attendance/personnel', [PersonnelAttendanceController::class, 'store'])->name('attendance.store');
     Route::post('/attendance/personnel/checkout', [PersonnelAttendanceController::class, 'checkout'])->name('attendance.checkout');
     Route::get('/attendance/personnel/recap/pdf', [PersonnelAttendanceController::class, 'exportPdf'])->name('attendance.personnel.recap.pdf');
+    Route::post('/attendance/personnel/recap/send-email', [PersonnelAttendanceController::class, 'sendEmailExcel'])->name('attendance.personnel.recap.send_email');
     Route::get('/attendance/personnel/recap', [PersonnelAttendanceController::class, 'recap'])->name('attendance.personnel.recap');
     Route::post('/attendance/personnel/recap/update', [PersonnelAttendanceController::class, 'updateRecap'])->name('attendance.personnel.recap.update');
     Route::get('/attendance/students', [StudentAttendanceController::class, 'index'])->name('attendance.students');

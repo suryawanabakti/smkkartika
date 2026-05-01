@@ -197,4 +197,35 @@ class PersonnelAttendanceController extends Controller
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.attendance.personnel_recap_pdf', compact('personnel', 'attendanceData', 'month', 'year', 'daysInMonth', 'startDate'))->setPaper('a4', 'landscape');
         return $pdf->download('rekap-kehadiran-pegawai-' . $year . '-' . $month . '.pdf');
     }
+
+    public function sendEmailExcel(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email'
+        ]);
+
+        $month = $request->get('month', date('n'));
+        $year = $request->get('year', date('Y'));
+        $email = $request->email;
+
+        $startDate = Carbon::createFromDate($year, $month, 1);
+        $daysInMonth = $startDate->daysInMonth;
+
+        $personnel = User::whereHas('role', function ($q) {
+            $q->whereIn('name', ['admin', 'teacher', 'staff']);
+        })->get();
+
+        $attendanceData = PersonnelAttendance::whereYear('date', $year)
+            ->whereMonth('date', $month)
+            ->get()
+            ->groupBy(['user_id', function ($item) {
+                return \Carbon\Carbon::parse($item->date)->day;
+            }]);
+
+        \Illuminate\Support\Facades\Mail::to($email)->send(new \App\Mail\PersonnelAttendanceRecapMail(
+            $month, $year, $personnel, $attendanceData, $daysInMonth, $startDate
+        ));
+
+        return back()->with('success', 'Email rekap kehadiran (Excel) berhasil dikirim.');
+    }
 }
