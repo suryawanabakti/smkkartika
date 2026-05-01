@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'kepalasekolah' => [
+        'email' => env('KEPALASEKOLAH_EMAIL'),
+    ],
+
 ];
