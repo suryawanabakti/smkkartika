@@ -26,14 +26,16 @@
             </div>
 
             <div class="flex flex-wrap items-center gap-3">
-                {{-- <button @click="editMode = !editMode" 
-                :class="editMode ? 'bg-amber-100 text-amber-700 border-amber-200' : 'bg-white text-gray-600 border-gray-100'"
-                class="px-4 py-2 rounded-xl border shadow-sm text-xs font-bold transition-all flex items-center gap-2">
-                <svg class="w-4 h-4" :class="editMode ? 'text-amber-600' : 'text-gray-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
-                <span x-text="editMode ? 'Matikan Mode Edit' : 'Aktifkan Mode Edit'"></span>
-            </button> --}}
+                <button @click="editMode = !editMode"
+                    :class="editMode ? 'bg-amber-100 text-amber-700 border-amber-200' : 'bg-white text-gray-600 border-gray-100'"
+                    class="px-4 py-2 rounded-xl border shadow-sm text-xs font-bold transition-all flex items-center gap-2">
+                    <svg class="w-4 h-4" :class="editMode ? 'text-amber-600' : 'text-gray-400'" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                    <span x-text="editMode ? 'Matikan Mode Edit' : 'Aktifkan Mode Edit'"></span>
+                </button>
 
                 <div class="px-4 py-3 bg-white rounded-xl border border-gray-100 shadow-sm">
                     <form action="{{ route('admin.attendance.personnel.recap') }}" method="GET"
@@ -73,9 +75,11 @@
                             </svg>
                             Cetak PDF
                         </a>
-                        <button type="button" @click="showEmailModal = true" class="px-4 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 transition-colors flex items-center gap-2">
+                        <button type="button" @click="showEmailModal = true"
+                            class="px-4 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 transition-colors flex items-center gap-2">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                             </svg>
                             Kirim Excel
                         </button>
@@ -429,11 +433,12 @@
 
             <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
                 <!-- Backdrop Overlay -->
-                <div x-show="showEmailModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
-                    x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200"
-                    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                    class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" @click="showEmailModal = false"
-                    aria-hidden="true"></div>
+                <div x-show="showEmailModal" x-transition:enter="ease-out duration-300"
+                    x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                    x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100"
+                    x-transition:leave-end="opacity-0"
+                    class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity"
+                    @click="showEmailModal = false" aria-hidden="true"></div>
 
                 <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
@@ -454,8 +459,10 @@
                         <div class="p-8">
                             <div class="flex items-start justify-between mb-6">
                                 <div class="space-y-1">
-                                    <h3 class="text-xl font-bold text-slate-800" id="modal-title">Kirim Rekap via Email</h3>
-                                    <p class="text-xs font-medium text-slate-500">Kirim rekap kehadiran (Excel) ke email tujuan.</p>
+                                    <h3 class="text-xl font-bold text-slate-800" id="modal-title">Kirim Rekap via Email
+                                    </h3>
+                                    <p class="text-xs font-medium text-slate-500">Kirim rekap kehadiran (Excel) ke email
+                                        tujuan.</p>
                                 </div>
                                 <button type="button" @click="showEmailModal = false"
                                     class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-xl transition-colors">
@@ -468,7 +475,9 @@
 
                             <div class="space-y-4">
                                 <div>
-                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Email Tujuan</label>
+                                    <label
+                                        class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Email
+                                        Tujuan</label>
                                     <input type="email" name="email" required
                                         class="w-full px-4 py-3 rounded-2xl border-2 border-slate-100 bg-slate-50/50 focus:bg-white focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-400 outline-none transition-all text-sm font-medium text-slate-700 placeholder:text-slate-300"
                                         placeholder="contoh: kepsek@smkkartika.sch.id">
@@ -479,7 +488,8 @@
                                 <button type="submit"
                                     class="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold shadow-lg shadow-emerald-200 hover:bg-emerald-700 hover:translate-y-[-2px] active:translate-y-[0px] transition-all text-sm flex items-center justify-center gap-2">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                                     </svg>
                                     Kirim Sekarang
                                 </button>

@@ -70,7 +70,16 @@
                             </div>
 
                             <!-- Position -->
-
+                            <div class="space-y-1">
+                                <label for="position" class="text-sm font-medium text-gray-700">Jabatan</label>
+                                <input type="text" name="position" id="position"
+                                    value="{{ old('position', $user->position) }}"
+                                    class="w-full rounded-xl border-gray-200 focus:border-indigo-500 focus:ring-indigo-500 transition-shadow"
+                                    placeholder="Masukkan Jabatan">
+                                @error('position')
+                                    <p class="text-xs text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
 
                             <div class="pt-4 md:col-span-2 border-t border-gray-100">
                                 <h3 class="text-sm font-semibold text-gray-900 mb-4">Ubah Kata Sandi (Kosongkan jika tidak

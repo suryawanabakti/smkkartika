@@ -25,6 +25,7 @@ class ProfileController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'nip' => ['nullable', 'string', 'max:50'],
             'gender' => ['nullable', 'in:L,P'],
+            'position' => ['nullable', 'string', 'max:100'],
 
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
         ]);
