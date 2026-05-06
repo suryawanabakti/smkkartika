@@ -14,6 +14,7 @@ class SchoolSettingSeeder extends Seeder
             'school_latitude' => '-5.1436',
             'school_longitude' => '119.4667',
             'school_radius' => '200', // meters
+            'min_check_out_time' => '15:00',
         ];
 
         foreach ($settings as $key => $value) {

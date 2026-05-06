@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\SchoolSettingController;
 use App\Http\Controllers\Admin\BackupController;
+use App\Http\Controllers\Teacher\TeachingRecapController as TeacherTeachingRecapController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -63,6 +64,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/attendance/students/recap/pdf', [StudentAttendanceController::class, 'exportPdf'])->name('attendance.students.recap.pdf');
     Route::get('/attendance/students/recap', [StudentAttendanceController::class, 'recap'])->name('attendance.students.recap');
 
+    Route::resource('teacher-schedules', \App\Http\Controllers\Admin\TeacherScheduleController::class);
+    Route::get('/attendance/teaching-recap', [PersonnelAttendanceController::class, 'teachingRecap'])->name('attendance.teaching_recap');
+    Route::get('/attendance/teaching-recap/pdf', [PersonnelAttendanceController::class, 'exportTeachingRecapPdf'])->name('attendance.teaching_recap.pdf');
+
     // School Settings
     Route::get('/settings/school', [SchoolSettingController::class, 'edit'])->name('settings.school');
     Route::put('/settings/school', [SchoolSettingController::class, 'update'])->name('settings.school.update');
@@ -85,6 +90,9 @@ Route::middleware(['auth', 'teacher'])->prefix('teacher')->name('teacher.')->gro
     Route::get('/students', [\App\Http\Controllers\Teacher\StudentAttendanceController::class, 'index'])->name('students.index');
     Route::post('/students', [\App\Http\Controllers\Teacher\StudentAttendanceController::class, 'store'])->name('students.store');
     Route::get('/students/recap', [\App\Http\Controllers\Teacher\StudentAttendanceController::class, 'recap'])->name('students.recap');
+
+    Route::get('/teaching-recap', [TeacherTeachingRecapController::class, 'index'])->name('teaching_recap.index');
+    Route::post('/teaching-recap', [TeacherTeachingRecapController::class, 'store'])->name('teaching_recap.store');
 });
 
 // Student Routes

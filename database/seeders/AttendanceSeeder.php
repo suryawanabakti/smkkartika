@@ -35,13 +35,24 @@ class AttendanceSeeder extends Seeder
 
             // Seed Personnel Attendance
             foreach ($teachers as $teacher) {
+                $status = $statuses[array_rand($statuses)];
+                $checkIn = null;
+                $checkOut = null;
+
+                if ($status === 'present') {
+                    $checkIn = $date->copy()->setTime(rand(7, 8), rand(0, 59), rand(0, 59));
+                    $checkOut = $date->copy()->setTime(rand(14, 16), rand(0, 59), rand(0, 59));
+                }
+
                 PersonnelAttendance::updateOrCreate(
                     [
                         'user_id' => $teacher->id,
                         'date' => $dateString,
                     ],
                     [
-                        'status' => $statuses[array_rand($statuses)],
+                        'status' => $status,
+                        'check_in_time' => $checkIn,
+                        'check_out_time' => $checkOut,
                     ]
                 );
             }

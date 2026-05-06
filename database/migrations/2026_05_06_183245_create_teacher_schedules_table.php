@@ -1,0 +1,33 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('teacher_schedules', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('teacher_id')->constrained()->onDelete('cascade');
+            $table->string('day'); // Monday, Tuesday, etc.
+            $table->string('subject');
+            $table->foreignId('class_id')->constrained('classes')->onDelete('cascade');
+            $table->integer('period_start'); // 1-11
+            $table->integer('period_end');   // 1-11
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('teacher_schedules');
+    }
+};

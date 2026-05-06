@@ -25,4 +25,9 @@ class Teacher extends Model
     {
         return $this->hasOne(ClassRoom::class, 'teacher_id');
     }
+
+    public function schedules()
+    {
+        return $this->hasMany(TeacherSchedule::class);
+    }
 }

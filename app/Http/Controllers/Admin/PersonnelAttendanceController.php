@@ -228,4 +228,52 @@ class PersonnelAttendanceController extends Controller
 
         return back()->with('success', 'Email rekap kehadiran (Excel) berhasil dikirim.');
     }
+
+    public function teachingRecap(Request $request)
+    {
+        $date = $request->get('date', Carbon::today()->toDateString());
+        $carbonDate = Carbon::parse($date);
+        $dayName = $this->translateDay($carbonDate->format('l'));
+
+        $teachers = \App\Models\Teacher::with(['user', 'schedules' => function($q) use ($dayName) {
+            $q->where('day', $dayName);
+        }, 'schedules.classRoom'])->get();
+
+        $attendances = PersonnelAttendance::whereDate('date', $date)->get()->keyBy('user_id');
+        $teachingAttendances = \App\Models\TeachingAttendance::whereDate('date', $date)->get()->groupBy('teacher_id');
+
+        return view('admin.attendance.teaching_recap', compact('teachers', 'attendances', 'teachingAttendances', 'date', 'dayName'));
+    }
+
+    public function exportTeachingRecapPdf(Request $request)
+    {
+        $date = $request->get('date', Carbon::today()->toDateString());
+        $carbonDate = Carbon::parse($date);
+        $dayName = $this->translateDay($carbonDate->format('l'));
+
+        $teachers = \App\Models\Teacher::with(['user', 'schedules' => function($q) use ($dayName) {
+            $q->where('day', $dayName);
+        }, 'schedules.classRoom'])->get();
+
+        $attendances = PersonnelAttendance::whereDate('date', $date)->get()->keyBy('user_id');
+        $teachingAttendances = \App\Models\TeachingAttendance::whereDate('date', $date)->get()->groupBy('teacher_id');
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.attendance.teaching_recap_pdf', compact('teachers', 'attendances', 'teachingAttendances', 'date', 'dayName'))->setPaper('a4', 'landscape');
+        return $pdf->download('rekap-absen-mengajar-' . $date . '.pdf');
+    }
+
+    private function translateDay($day)
+    {
+        $days = [
+            'Monday' => 'Senin',
+            'Tuesday' => 'Selasa',
+            'Wednesday' => 'Rabu',
+            'Thursday' => 'Kamis',
+            'Friday' => 'Jumat',
+            'Saturday' => 'Sabtu',
+            'Sunday' => 'Minggu',
+        ];
+
+        return $days[$day] ?? $day;
+    }
 }
