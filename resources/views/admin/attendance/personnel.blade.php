@@ -15,7 +15,8 @@
                 class="flex flex-col md:flex-row gap-4 items-end">
                 <div class="flex-1">
                     <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Cari Guru</label>
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari berdasarkan nama..."
+                    <input type="text" name="search" value="{{ request('search') }}"
+                        placeholder="Cari berdasarkan nama..."
                         class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all">
                 </div>
                 <div class="w-full md:w-48">
@@ -50,10 +51,15 @@
                 <table class="w-full text-left border-collapse">
                     <thead class="bg-gray-50 border-b">
                         <tr>
-                            <th class="px-4 sm:px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Nama Guru</th>
-                            <th class="px-4 sm:px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider hidden sm:table-cell">NIP</th>
-                            <th class="px-4 sm:px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Masuk/Keluar</th>
-                            <th class="px-4 sm:px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-4 sm:px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Nama
+                                Guru</th>
+                            <th
+                                class="px-4 sm:px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider hidden sm:table-cell">
+                                NIP</th>
+                            <th class="px-4 sm:px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                Masuk/Keluar</th>
+                            <th class="px-4 sm:px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                Status</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 text-sm">
@@ -61,14 +67,18 @@
                             <tr class="hover:bg-gray-50 transition-colors">
                                 <td class="px-4 sm:px-6 py-4 font-medium text-gray-800">
                                     <div>{{ $attendance->user->name }}</div>
-                                    <div class="sm:hidden text-[10px] text-gray-500 font-mono">{{ $attendance->nip }}</div>
+                                    <div class="sm:hidden text-[10px] text-gray-500 font-mono">{{ $attendance->user?->nip }}
+                                    </div>
                                 </td>
-                                <td class="px-4 sm:px-6 py-4 hidden sm:table-cell text-gray-600 font-mono text-xs">{{ $attendance->nip }}</td>
+                                <td class="px-4 sm:px-6 py-4 hidden sm:table-cell text-gray-600 font-mono text-xs">
+                                    {{ $attendance->user?->nip }}</td>
                                 <td class="px-4 sm:px-6 py-4 text-gray-600">
                                     <div class="flex flex-col sm:flex-row sm:gap-2">
-                                        <span class="text-emerald-600 font-bold sm:font-medium">{{ $attendance->check_in_time ? \Carbon\Carbon::parse($attendance->check_in_time)->format('H:i') : '-' }}</span>
+                                        <span
+                                            class="text-emerald-600 font-bold sm:font-medium">{{ $attendance->check_in_time ? \Carbon\Carbon::parse($attendance->check_in_time)->format('H:i') : '-' }}</span>
                                         <span class="hidden sm:inline text-gray-300">/</span>
-                                        <span class="text-rose-600 font-bold sm:font-medium">{{ $attendance->check_out_time ? \Carbon\Carbon::parse($attendance->check_out_time)->format('H:i') : '-' }}</span>
+                                        <span
+                                            class="text-rose-600 font-bold sm:font-medium">{{ $attendance->check_out_time ? \Carbon\Carbon::parse($attendance->check_out_time)->format('H:i') : '-' }}</span>
                                     </div>
                                 </td>
                                 <td class="px-4 sm:px-6 py-4">

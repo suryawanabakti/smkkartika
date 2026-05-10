@@ -105,16 +105,7 @@
             @endphp
 
             @if(!$todayAttendance)
-                @if($isPastPulang)
-                    <div class="p-6 bg-rose-50 border border-rose-100 rounded-2xl sm:rounded-[2rem] text-center space-y-3">
-                        <div class="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        </div>
-                        <h4 class="text-base sm:text-lg font-black text-rose-900 uppercase tracking-tight">Waktu Absensi Berakhir</h4>
-                        <p class="text-xs sm:text-sm text-rose-600 font-medium leading-relaxed">Waktu absensi masuk sudah berakhir (lewat jam {{ $workHours['min_check_out'] }} WITA). Anda tercatat Alfa hari ini jika tidak hadir.</p>
-                    </div>
-                @else
-                    {{-- STATE 1: Belum check-in --}}
+                {{-- STATE 1: Belum check-in --}}
                 <form id="attendance-form" action="{{ route('staff.attendance.store') }}" method="POST">
                     @csrf
                     <input type="hidden" name="latitude" id="input-latitude">
@@ -146,7 +137,6 @@
                         <span id="btn-text">Menunggu Lokasi...</span>
                     </button>
                 </form>
-                @endif
             @elseif(!$todayAttendance->check_out_time)
                 {{-- STATE 2: Sudah check-in, belum check-out --}}
                 <div class="space-y-4">

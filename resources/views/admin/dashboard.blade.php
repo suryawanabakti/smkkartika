@@ -51,10 +51,7 @@
                     <p class="text-xs text-gray-500 font-medium">Statistik kehadiran 7 hari terakhir</p>
                 </div>
                 <div class="flex items-center gap-4">
-                    <div class="flex items-center gap-2">
-                        <span class="w-3 h-3 bg-emerald-500 rounded-full"></span>
-                        <span class="text-[10px] font-bold text-gray-600 uppercase tracking-widest">Siswa</span>
-                    </div>
+
                     <div class="flex items-center gap-2">
                         <span class="w-3 h-3 bg-indigo-500 rounded-full"></span>
                         <span class="text-[10px] font-bold text-gray-600 uppercase tracking-widest">Pegawai</span>
@@ -201,36 +198,28 @@
                     @endphp
 
                     @if (!$myAttendance)
-                        @if ($isPastPulang)
-                            <div class="p-3 bg-white/10 rounded-xl border border-white/5 text-center mb-2">
-                                <p class="text-[10px] font-black uppercase text-indigo-100">Waktu Absensi Berakhir</p>
-                                <p class="text-[9px] font-bold mt-1 text-white/80 leading-relaxed">Sudah lewat jam
-                                    {{ $schoolSettings['min_check_out'] }} WITA</p>
+                        <form action="{{ route('admin.attendance.store') }}" method="POST" id="admin-attendance-form">
+                            @csrf
+                            <input type="hidden" name="latitude" id="admin-lat">
+                            <input type="hidden" name="longitude" id="admin-lng">
+
+                            <div id="admin-status-container" class="hidden mb-3 space-y-2">
+                                <select name="status" id="admin-status-select"
+                                    class="w-full py-2 bg-white/20 border-white/20 rounded-xl text-[10px] font-bold text-white placeholder-white/50 focus:ring-0 focus:border-white/40">
+                                    <option value="present" class="text-gray-800" id="admin-opt-present">Hadir</option>
+                                    <option value="sick" class="text-gray-800">Sakit</option>
+                                    <option value="permission" class="text-gray-800">Izin</option>
+                                    <option value="absent" class="text-gray-800">Alfa</option>
+                                </select>
+                                <input type="text" name="description" placeholder="Keterangan (Opsional)"
+                                    class="w-full py-2 bg-white/10 border-white/10 rounded-xl text-[10px] font-bold text-white placeholder-white/50 focus:ring-0 focus:border-white/40">
                             </div>
-                        @else
-                            <form action="{{ route('admin.attendance.store') }}" method="POST" id="admin-attendance-form">
-                                @csrf
-                                <input type="hidden" name="latitude" id="admin-lat">
-                                <input type="hidden" name="longitude" id="admin-lng">
 
-                                <div id="admin-status-container" class="hidden mb-3 space-y-2">
-                                    <select name="status" id="admin-status-select"
-                                        class="w-full py-2 bg-white/20 border-white/20 rounded-xl text-[10px] font-bold text-white placeholder-white/50 focus:ring-0 focus:border-white/40">
-                                        <option value="present" class="text-gray-800" id="admin-opt-present">Hadir</option>
-                                        <option value="sick" class="text-gray-800">Sakit</option>
-                                        <option value="permission" class="text-gray-800">Izin</option>
-                                        <option value="absent" class="text-gray-800">Alfa</option>
-                                    </select>
-                                    <input type="text" name="description" placeholder="Keterangan (Opsional)"
-                                        class="w-full py-2 bg-white/10 border-white/10 rounded-xl text-[10px] font-bold text-white placeholder-white/50 focus:ring-0 focus:border-white/40">
-                                </div>
-
-                                <button type="submit" id="admin-btn-absen" disabled
-                                    class="w-full py-3 bg-white text-indigo-600 rounded-xl font-black text-xs shadow-xl transition-all flex items-center justify-center gap-2 cursor-not-allowed opacity-50">
-                                    MENCARI LOKASI...
-                                </button>
-                            </form>
-                        @endif
+                            <button type="submit" id="admin-btn-absen" disabled
+                                class="w-full py-3 bg-white text-indigo-600 rounded-xl font-black text-xs shadow-xl transition-all flex items-center justify-center gap-2 cursor-not-allowed opacity-50">
+                                MENCARI LOKASI...
+                            </button>
+                        </form>
                     @elseif(!$myAttendance->check_out_time)
                         <div class="space-y-2">
                             <div

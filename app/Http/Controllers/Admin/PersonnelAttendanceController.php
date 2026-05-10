@@ -101,11 +101,6 @@ class PersonnelAttendanceController extends Controller
             return back()->with('error', 'Anda sudah melakukan absensi hari ini.');
         }
 
-        $minCheckOut = \App\Models\SchoolSetting::get('min_check_out_time', '15:00');
-        if (now()->format('H:i') > $minCheckOut) {
-            return back()->with('error', 'Gagal absen. Waktu absensi hari ini telah berakhir (sudah lewat jam pulang pukul ' . $minCheckOut . ').');
-        }
-
         $status = $request->status;
 
         if ($status === 'present') {
@@ -223,7 +218,12 @@ class PersonnelAttendanceController extends Controller
             }]);
 
         \Illuminate\Support\Facades\Mail::to($email)->send(new \App\Mail\PersonnelAttendanceRecapMail(
-            $month, $year, $personnel, $attendanceData, $daysInMonth, $startDate
+            $month,
+            $year,
+            $personnel,
+            $attendanceData,
+            $daysInMonth,
+            $startDate
         ));
 
         return back()->with('success', 'Email rekap kehadiran (Excel) berhasil dikirim.');
@@ -235,7 +235,7 @@ class PersonnelAttendanceController extends Controller
         $carbonDate = Carbon::parse($date);
         $dayName = $this->translateDay($carbonDate->format('l'));
 
-        $teachers = \App\Models\Teacher::with(['user', 'schedules' => function($q) use ($dayName) {
+        $teachers = \App\Models\Teacher::with(['user', 'schedules' => function ($q) use ($dayName) {
             $q->where('day', $dayName);
         }, 'schedules.classRoom'])->get();
 
@@ -251,7 +251,7 @@ class PersonnelAttendanceController extends Controller
         $carbonDate = Carbon::parse($date);
         $dayName = $this->translateDay($carbonDate->format('l'));
 
-        $teachers = \App\Models\Teacher::with(['user', 'schedules' => function($q) use ($dayName) {
+        $teachers = \App\Models\Teacher::with(['user', 'schedules' => function ($q) use ($dayName) {
             $q->where('day', $dayName);
         }, 'schedules.classRoom'])->get();
 

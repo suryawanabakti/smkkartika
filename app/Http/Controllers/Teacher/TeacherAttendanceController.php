@@ -58,11 +58,6 @@ class TeacherAttendanceController extends Controller
         }
 
         $now = now();
-        $minCheckOut = SchoolSetting::get('min_check_out_time', '15:00');
-        if ($now->format('H:i') > $minCheckOut) {
-            return back()->with('error', 'Gagal absen. Waktu absensi hari ini telah berakhir (sudah lewat jam pulang pukul ' . $minCheckOut . ').');
-        }
-
         $status = $request->status;
 
         // Radius check only for 'present' status
