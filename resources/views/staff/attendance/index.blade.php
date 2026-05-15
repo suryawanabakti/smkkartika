@@ -20,15 +20,27 @@
                 </div>
             </div>
         @elseif($todayAttendance)
-            <div class="px-6 py-3 bg-amber-50 border border-amber-100 rounded-2xl flex items-center gap-3 text-amber-700 shadow-sm">
-                <div class="w-8 h-8 rounded-full bg-amber-500 text-white flex items-center justify-center">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            @if(in_array($todayAttendance->status, ['sick', 'permission']))
+                <div class="px-6 py-3 bg-blue-50 border border-blue-100 rounded-2xl flex items-center gap-3 text-blue-700 shadow-sm">
+                    <div class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-blue-500/70 leading-none">Status</p>
+                        <p class="font-bold">{{ $todayAttendance->status == 'sick' ? 'Sakit' : 'Izin' }} — Tidak Perlu Absen Pulang</p>
+                    </div>
                 </div>
-                <div>
-                    <p class="text-[10px] font-black uppercase tracking-widest text-amber-500/70 leading-none">Status</p>
-                    <p class="font-bold">Sudah Masuk — Belum Pulang</p>
+            @else
+                <div class="px-6 py-3 bg-amber-50 border border-amber-100 rounded-2xl flex items-center gap-3 text-amber-700 shadow-sm">
+                    <div class="w-8 h-8 rounded-full bg-amber-500 text-white flex items-center justify-center">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-amber-500/70 leading-none">Status</p>
+                        <p class="font-bold">Sudah Masuk — Belum Pulang</p>
+                    </div>
                 </div>
-            </div>
+            @endif
         @endif
     </div>
 
@@ -139,23 +151,35 @@
                 </form>
             @elseif(!$todayAttendance->check_out_time)
                 {{-- STATE 2: Sudah check-in, belum check-out --}}
-                <div class="space-y-4">
-                    <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-100 flex items-center justify-between">
-                        <div class="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Masuk</div>
-                        <div class="text-base sm:text-lg font-black text-emerald-800">{{ Carbon\Carbon::parse($todayAttendance->check_in_time)->format('H:i') }}</div>
+                @if(in_array($todayAttendance->status, ['sick', 'permission']))
+                    <div class="space-y-4">
+                        <div class="p-4 bg-blue-50 rounded-2xl border border-blue-100 flex items-center justify-between">
+                            <div class="text-[10px] font-bold text-blue-600 uppercase tracking-widest">Status</div>
+                            <div class="text-base sm:text-lg font-black text-blue-800">{{ $todayAttendance->status == 'sick' ? 'Sakit' : 'Izin' }}</div>
+                        </div>
+                        <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 text-center">
+                            <p class="text-sm text-slate-500 font-medium">Anda sedang dalam status <strong>{{ $todayAttendance->status == 'sick' ? 'Sakit' : 'Izin' }}</strong>. Tidak diperlukan absensi pulang.</p>
+                        </div>
                     </div>
+                @else
+                    <div class="space-y-4">
+                        <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-100 flex items-center justify-between">
+                            <div class="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Masuk</div>
+                            <div class="text-base sm:text-lg font-black text-emerald-800">{{ Carbon\Carbon::parse($todayAttendance->check_in_time)->format('H:i') }}</div>
+                        </div>
 
-                    <form id="checkout-form" action="{{ route('staff.attendance.checkout') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="latitude" id="input-latitude">
-                        <input type="hidden" name="longitude" id="input-longitude">
-                        <button type="submit" id="btn-absen" disabled
-                            class="w-full py-3.5 sm:py-4 bg-slate-300 text-white rounded-2xl font-bold shadow-lg transition-all flex items-center justify-center gap-2 cursor-not-allowed text-sm sm:text-base">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-                            <span id="btn-text">Absen Pulang</span>
-                        </button>
-                    </form>
-                </div>
+                        <form id="checkout-form" action="{{ route('staff.attendance.checkout') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="latitude" id="input-latitude">
+                            <input type="hidden" name="longitude" id="input-longitude">
+                            <button type="submit" id="btn-absen" disabled
+                                class="w-full py-3.5 sm:py-4 bg-slate-300 text-white rounded-2xl font-bold shadow-lg transition-all flex items-center justify-center gap-2 cursor-not-allowed text-sm sm:text-base">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                                <span id="btn-text">Menunggu Lokasi...</span>
+                            </button>
+                        </form>
+                    </div>
+                @endif
             @else
                 {{-- STATE 3: Sudah check-in dan check-out --}}
                 <div class="space-y-3">

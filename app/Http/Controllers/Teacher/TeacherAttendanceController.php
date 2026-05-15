@@ -127,6 +127,10 @@ class TeacherAttendanceController extends Controller
             return back()->with('error', 'Anda sudah melakukan absensi pulang hari ini.');
         }
 
+        if (in_array($attendance->status, ['sick', 'permission'])) {
+            return back()->with('error', 'Guru yang sedang Izin atau Sakit tidak perlu melakukan absensi pulang.');
+        }
+
         // Validate minimum check-out time
         $minCheckOut = SchoolSetting::get('min_check_out_time', '15:00');
         $now = now();
