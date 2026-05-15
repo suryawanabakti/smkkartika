@@ -163,6 +163,10 @@ class PersonnelAttendanceController extends Controller
             return back()->with('error', 'Anda sudah melakukan absensi pulang hari ini.');
         }
 
+        if (in_array($attendance->status, ['sick', 'permission'])) {
+            return back()->with('error', 'Admin yang sedang Izin atau Sakit tidak perlu melakukan absensi pulang.');
+        }
+
         $attendance->update([
             'check_out_time' => now(),
         ]);

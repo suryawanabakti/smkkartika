@@ -36,7 +36,11 @@
                     @if($myAttendance && $myAttendance->check_out_time)
                         <span class="px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-xl text-[10px] font-black uppercase tracking-widest border border-emerald-100">Selesai</span>
                     @elseif($myAttendance)
-                        <span class="px-4 py-1.5 bg-amber-50 text-amber-600 rounded-xl text-[10px] font-black uppercase tracking-widest border border-amber-100 animate-pulse">Aktif</span>
+                        @if(in_array($myAttendance->status, ['sick', 'permission']))
+                            <span class="px-4 py-1.5 bg-blue-50 text-blue-600 rounded-xl text-[10px] font-black uppercase tracking-widest border border-blue-100">{{ $myAttendance->status == 'sick' ? 'Sakit' : 'Izin' }}</span>
+                        @else
+                            <span class="px-4 py-1.5 bg-amber-50 text-amber-600 rounded-xl text-[10px] font-black uppercase tracking-widest border border-amber-100 animate-pulse">Aktif</span>
+                        @endif
                     @else
                         <span class="px-4 py-1.5 bg-rose-50 text-rose-600 rounded-xl text-[10px] font-black uppercase tracking-widest border border-rose-100">Belum Ada</span>
                     @endif
@@ -119,30 +123,42 @@
                     </script>
                 @elseif(!$myAttendance->check_out_time)
                     {{-- Checked in, not checked out --}}
-                    <div class="space-y-4">
-                        <div class="p-5 bg-emerald-50/50 rounded-2xl border border-emerald-100 flex items-center justify-between">
-                            <div class="text-[10px] font-black text-emerald-600 uppercase tracking-widest">Jam Masuk</div>
-                            <div class="text-sm font-black text-slate-800 tracking-tight">{{ Carbon\Carbon::parse($myAttendance->check_in_time)->format('H:i') }}</div>
-                        </div>
-
-                        <form action="{{ route('staff.attendance.checkout') }}" method="POST" id="dashboard-checkout-form">
-                            @csrf
-                            <input type="hidden" name="latitude" id="dash-latitude">
-                            <input type="hidden" name="longitude" id="dash-longitude">
-
-                            <div id="dash-location-info" class="mb-4 p-4 bg-slate-50 border border-slate-100 rounded-2xl flex items-center gap-3">
-                                <div class="w-6 h-6 rounded-full bg-slate-200 text-slate-400 flex items-center justify-center">
-                                    <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+                    @if(in_array($myAttendance->status, ['sick', 'permission']))
+                        <div class="space-y-4">
+                            <div class="p-6 bg-blue-50/50 rounded-2xl border border-blue-100 text-center">
+                                <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mx-auto mb-3">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                 </div>
-                                <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Mencari Koordinat...</span>
+                                <h4 class="text-blue-900 font-black text-sm uppercase tracking-tight">Status: {{ $myAttendance->status == 'sick' ? 'Sakit' : 'Izin' }}</h4>
+                                <p class="text-[11px] text-blue-600 mt-1 font-bold uppercase tracking-widest">Tidak perlu absen pulang</p>
+                            </div>
+                        </div>
+                    @else
+                        <div class="space-y-4">
+                            <div class="p-5 bg-emerald-50/50 rounded-2xl border border-emerald-100 flex items-center justify-between">
+                                <div class="text-[10px] font-black text-emerald-600 uppercase tracking-widest">Jam Masuk</div>
+                                <div class="text-sm font-black text-slate-800 tracking-tight">{{ Carbon\Carbon::parse($myAttendance->check_in_time)->format('H:i') }}</div>
                             </div>
 
-                            <button type="submit" id="dash-btn-absen" disabled
-                                class="w-full py-5 bg-slate-100 text-slate-300 rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2 cursor-not-allowed border border-slate-200">
-                                Pulang Sekarang
-                            </button>
-                        </form>
-                    </div>
+                            <form action="{{ route('staff.attendance.checkout') }}" method="POST" id="dashboard-checkout-form">
+                                @csrf
+                                <input type="hidden" name="latitude" id="dash-latitude">
+                                <input type="hidden" name="longitude" id="dash-longitude">
+
+                                <div id="dash-location-info" class="mb-4 p-4 bg-slate-50 border border-slate-100 rounded-2xl flex items-center gap-3">
+                                    <div class="w-6 h-6 rounded-full bg-slate-200 text-slate-400 flex items-center justify-center">
+                                        <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+                                    </div>
+                                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Mencari Koordinat...</span>
+                                </div>
+
+                                <button type="submit" id="dash-btn-absen" disabled
+                                    class="w-full py-5 bg-slate-100 text-slate-300 rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2 cursor-not-allowed border border-slate-200">
+                                    Pulang Sekarang
+                                </button>
+                            </form>
+                        </div>
+                    @endif
 
                     <script>
                     (function() {

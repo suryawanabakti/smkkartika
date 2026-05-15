@@ -45,13 +45,15 @@
                             <span
                                 class="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black uppercase tracking-widest border border-emerald-100">Selesai</span>
                         @elseif($myAttendance)
-                            <span
-                                class="px-3 py-1 bg-amber-50 text-amber-600 rounded-full text-[10px] font-black uppercase tracking-widest border border-amber-100">Sudah
-                                Masuk</span>
+                            @if(in_array($myAttendance->status, ['sick', 'permission']))
+                                <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-[10px] font-black uppercase tracking-widest border border-blue-100">{{ $myAttendance->status == 'sick' ? 'Sakit' : 'Izin' }}</span>
+                            @else
+                                <span
+                                    class="px-3 py-1 bg-amber-50 text-amber-600 rounded-full text-[10px] font-black uppercase tracking-widest border border-amber-100">Sudah Masuk</span>
+                            @endif
                         @else
                             <span
-                                class="px-3 py-1 bg-rose-50 text-rose-600 rounded-full text-[10px] font-black uppercase tracking-widest border border-rose-100">Belum
-                                Absen</span>
+                                class="px-3 py-1 bg-rose-50 text-rose-600 rounded-full text-[10px] font-black uppercase tracking-widest border border-rose-100">Belum Absen</span>
                         @endif
                     </div>
 
@@ -156,43 +158,55 @@
                         </script>
                     @elseif(!$myAttendance->check_out_time)
                         {{-- Checked in, not checked out --}}
-                        <div class="space-y-3">
-                            <div
-                                class="p-3 bg-emerald-50 rounded-xl border border-emerald-100 flex items-center justify-between">
-                                <div class="text-[10px] font-black text-emerald-600 uppercase tracking-widest">Masuk</div>
-                                <div class="text-sm font-black text-emerald-800">
-                                    {{ Carbon\Carbon::parse($myAttendance->check_in_time)->format('H:i') }}</div>
-                            </div>
-
-                            <form action="{{ route('teacher.attendance.checkout') }}" method="POST"
-                                id="dashboard-checkout-form">
-                                @csrf
-                                <input type="hidden" name="latitude" id="dash-latitude">
-                                <input type="hidden" name="longitude" id="dash-longitude">
-
-                                <div id="dash-location-info"
-                                    class="mb-3 p-3 bg-amber-50 border border-amber-100 rounded-xl flex items-center gap-2">
-                                    <div
-                                        class="w-5 h-5 rounded-full bg-amber-200 text-amber-600 flex items-center justify-center animate-pulse">
-                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                        </svg>
+                        @if(in_array($myAttendance->status, ['sick', 'permission']))
+                            <div class="space-y-3">
+                                <div class="p-4 bg-blue-50 rounded-2xl border border-blue-100 text-center">
+                                    <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mx-auto mb-2">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                     </div>
-                                    <span class="text-[10px] font-black text-amber-600 uppercase tracking-widest">Mencari
-                                        Lokasi GPS...</span>
+                                    <h4 class="text-blue-900 font-bold text-sm">Status: {{ $myAttendance->status == 'sick' ? 'Sakit' : 'Izin' }}</h4>
+                                    <p class="text-[10px] text-blue-600 mt-1 font-medium">Anda tidak perlu melakukan absensi pulang.</p>
+                                </div>
+                            </div>
+                        @else
+                            <div class="space-y-3">
+                                <div
+                                    class="p-3 bg-emerald-50 rounded-xl border border-emerald-100 flex items-center justify-between">
+                                    <div class="text-[10px] font-black text-emerald-600 uppercase tracking-widest">Masuk</div>
+                                    <div class="text-sm font-black text-emerald-800">
+                                        {{ Carbon\Carbon::parse($myAttendance->check_in_time)->format('H:i') }}</div>
                                 </div>
 
-                                <button type="submit" id="dash-btn-absen" disabled
-                                    class="w-full py-3 bg-slate-300 text-white rounded-2xl font-bold shadow-lg transition-all flex items-center justify-center gap-2 cursor-not-allowed text-sm">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                    </svg>
-                                    <span id="dash-btn-text">Menunggu Lokasi...</span>
-                                </button>
-                            </form>
-                        </div>
+                                <form action="{{ route('teacher.attendance.checkout') }}" method="POST"
+                                    id="dashboard-checkout-form">
+                                    @csrf
+                                    <input type="hidden" name="latitude" id="dash-latitude">
+                                    <input type="hidden" name="longitude" id="dash-longitude">
+
+                                    <div id="dash-location-info"
+                                        class="mb-3 p-3 bg-amber-50 border border-amber-100 rounded-xl flex items-center gap-2">
+                                        <div
+                                            class="w-5 h-5 rounded-full bg-amber-200 text-amber-600 flex items-center justify-center animate-pulse">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                            </svg>
+                                        </div>
+                                        <span class="text-[10px] font-black text-amber-600 uppercase tracking-widest">Mencari
+                                            Lokasi GPS...</span>
+                                    </div>
+
+                                    <button type="submit" id="dash-btn-absen" disabled
+                                        class="w-full py-3 bg-slate-300 text-white rounded-2xl font-bold shadow-lg transition-all flex items-center justify-center gap-2 cursor-not-allowed text-sm">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                        </svg>
+                                        <span id="dash-btn-text">Menunggu Lokasi...</span>
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
 
                         <script>
                             (function() {

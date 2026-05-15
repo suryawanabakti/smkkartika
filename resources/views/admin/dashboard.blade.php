@@ -183,9 +183,14 @@
                                 class="px-2 py-0.5 bg-emerald-500/20 rounded-lg text-[8px] font-black uppercase tracking-widest border border-white/10">Selesai
                                 Berkerja</span>
                         @elseif($myAttendance)
-                            <span
-                                class="px-2 py-0.5 bg-amber-500/20 rounded-lg text-[8px] font-black uppercase tracking-widest border border-white/10">Sedang
-                                Berkerja</span>
+                            @if(in_array($myAttendance->status, ['sick', 'permission']))
+                                <span
+                                    class="px-2 py-0.5 bg-blue-500/20 rounded-lg text-[8px] font-black uppercase tracking-widest border border-white/10">{{ $myAttendance->status == 'sick' ? 'Sakit' : 'Izin' }}</span>
+                            @else
+                                <span
+                                    class="px-2 py-0.5 bg-amber-500/20 rounded-lg text-[8px] font-black uppercase tracking-widest border border-white/10">Sedang
+                                    Berkerja</span>
+                            @endif
                         @endif
                     </div>
                     <h3 class="text-xl font-black mb-2">Halo, Admin!</h3>
@@ -221,24 +226,33 @@
                             </button>
                         </form>
                     @elseif(!$myAttendance->check_out_time)
-                        <div class="space-y-2">
-                            <div
-                                class="px-3 py-2 bg-white/10 rounded-xl flex items-center justify-between border border-white/5">
-                                <span class="text-[10px] font-bold text-indigo-100 uppercase">Waktu Masuk</span>
-                                <span
-                                    class="font-black">{{ Carbon\Carbon::parse($myAttendance->check_in_time)->format('H:i') }}</span>
+                        @if(in_array($myAttendance->status, ['sick', 'permission']))
+                            <div class="space-y-2">
+                                <div class="px-3 py-4 bg-white/10 rounded-xl text-center border border-white/10">
+                                    <p class="text-[10px] font-black uppercase tracking-widest text-indigo-100">Status: {{ $myAttendance->status == 'sick' ? 'Sakit' : 'Izin' }}</p>
+                                    <p class="text-[9px] font-bold text-white/70 mt-1">Tidak perlu absen pulang</p>
+                                </div>
                             </div>
-                            <form action="{{ route('admin.attendance.checkout') }}" method="POST"
-                                id="admin-attendance-form">
-                                @csrf
-                                <input type="hidden" name="latitude" id="admin-lat">
-                                <input type="hidden" name="longitude" id="admin-lng">
-                                <button type="submit" id="admin-btn-absen" disabled
-                                    class="w-full py-3 bg-indigo-500 text-white rounded-xl font-black text-xs shadow-xl transition-all border border-indigo-400 cursor-not-allowed opacity-50">
-                                    ABSEN PULANG
-                                </button>
-                            </form>
-                        </div>
+                        @else
+                            <div class="space-y-2">
+                                <div
+                                    class="px-3 py-2 bg-white/10 rounded-xl flex items-center justify-between border border-white/5">
+                                    <span class="text-[10px] font-bold text-indigo-100 uppercase">Waktu Masuk</span>
+                                    <span
+                                        class="font-black">{{ Carbon\Carbon::parse($myAttendance->check_in_time)->format('H:i') }}</span>
+                                </div>
+                                <form action="{{ route('admin.attendance.checkout') }}" method="POST"
+                                    id="admin-attendance-form">
+                                    @csrf
+                                    <input type="hidden" name="latitude" id="admin-lat">
+                                    <input type="hidden" name="longitude" id="admin-lng">
+                                    <button type="submit" id="admin-btn-absen" disabled
+                                        class="w-full py-3 bg-indigo-500 text-white rounded-xl font-black text-xs shadow-xl transition-all border border-indigo-400 cursor-not-allowed opacity-50">
+                                        ABSEN PULANG
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
                     @else
                         <div class="space-y-2">
                             <div
